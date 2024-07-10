@@ -8,7 +8,7 @@ export default function Home() {
 
   if (isLoading) return<div>Loading...</div>;
   if (error) return <div>{error.message}</div>
-
+  console.log(user)
   return (
     <main className="flex w-screen min-h-screen">
       <div className="flex w-screen h-[2rem] bg-slate-50">
