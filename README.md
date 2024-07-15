@@ -2,35 +2,39 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+- Retreive an env.local file from the team and add it to your root directory
+
+- Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Making Updates and Deployment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Create branch off of main and add your changes
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Run build before pushing
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+- When your branch merges into main it will be automatically deployed
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Useful links
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# Authorization
 
-## Deploy on Vercel
+- [Auth0](https://developer.auth0.com/resources) : General Docs
+- [nextjs-auth0](https://auth0.github.io/nextjs-auth0/index.html) : Specific npm package we are using, maintained by Auth0
+- [Auth Dashboard Login](https://auth0.com/api/auth/login?redirectTo=dashboard): login using google account SSO ourkive.developer@gmail.com
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Hosting
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [Vercel](https://vercel.com/ourkive-davis-s-projects/relationship-app): login with email ourkive.developer@gmail.com
+
+# Design Docs
+
+- [Figma](https://www.figma.com/design/Pj2683c0Id1wbZPqnIdDAA/Untitled?node-id=0-1&t=UtgOYFgdR6DVzicu-0)
+- [Todo/Design](https://lucid.app/lucidspark/67f2949b-a5ec-42f5-8105-31bf6368f86a/edit?viewport_loc=-2036%2C-3606%2C6513%2C3320%2C0_0&invitationId=inv_aaa447ef-a751-4b4c-b53c-0226a5d445c5)

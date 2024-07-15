@@ -17,6 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <title>Ourkive</title>
       <UserProvider>
         <body className={inter.className}>{children}</body>
       </UserProvider>
