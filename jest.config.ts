@@ -10,7 +10,14 @@ const createJestConfig = nextJest({
 const config: Config = {
   coverageProvider: "v8",
   testEnvironment: "jsdom",
-  collectCoverageFrom: ["src/**/*.tsx", "src/**/*.jsx", "src/**/*.js", "src/**/*.ts", "!src/middleware.ts", "!src/app/api/auth/[auth0]/route.js"]  
+  collectCoverageFrom: [
+    "src/**/*.tsx",
+    "src/**/*.jsx",
+    "src/**/*.js",
+    "src/**/*.ts",
+    "!src/middleware.ts",
+    "!src/app/api/auth/[auth0]/route.js",
+  ],
   // Add more setup options before each test is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };

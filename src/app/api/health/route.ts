@@ -1,6 +1,5 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export function GET() {
-    return NextResponse.json({status: "up"})
-  }
-  
+  return NextResponse.json({ status: "up" });
+}
