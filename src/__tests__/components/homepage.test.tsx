@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
-import Home from "../app/page";
+import { render, waitFor } from "@testing-library/react";
+import Home from "../../app/page";
 import * as Auth0Client from "@auth0/nextjs-auth0/client";
 
 describe("HomePage", () => {
