@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 export function useScrapbooks() {
     const {user} = useUser()
     let scrapbooks: Scrapbook[] = []
-    let request = fetch(`${process.env.API_BASE_URL}scrapbooks`)
+    let request = fetch(`${process.env.API_BASE_URL}api/protected/scrapbooks`)
     useEffect(() => {
         if(user) {
             request.then(res => {
@@ -14,7 +14,6 @@ export function useScrapbooks() {
                     scrapbooks = data.scrapbooks
                 })
             })
-            scrapbooks = []
         }
     }, [user])
 }
