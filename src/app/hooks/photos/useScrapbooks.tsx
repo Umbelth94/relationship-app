@@ -6,11 +6,13 @@ import { use, useEffect, useState } from "react";
 export function useScrapbooks(): Scrapbook[] {
   const { user } = useUser();
   const [scrapbooks, setScrapbooks] = useState<Scrapbook[]>([]);
-  const [ didFetch, setDidFetch ] = useState<boolean>(false)
+  const [didFetch, setDidFetch] = useState<boolean>(false);
   useEffect(() => {
     if (user && didFetch == false) {
-      setDidFetch(true)
-      fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}api/protected/scrapbooks`).then((res) => {
+      setDidFetch(true);
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}api/protected/scrapbooks`,
+      ).then((res) => {
         res.json().then((data: ScrapbookCollectionResponseData) => {
           setScrapbooks(data.scrapbooks);
         });
