@@ -15,24 +15,24 @@ const config: Config = {
       },
     },
     colors: {
-      'primary': {
-        DEFAULT: '#27464E'
+      primary: {
+        DEFAULT: "#27464E",
       },
-      'on-primary':{
-        DEFAULT: '#FEAE88'
+      "on-primary": {
+        DEFAULT: "#FEAE88",
       },
-      'secondary':{
-        DEFAULT: '#FEAE88'
+      secondary: {
+        DEFAULT: "#FEAE88",
       },
-      'on-secondary':{
-        DEFAULT: '#FFFFFF'
+      "on-secondary": {
+        DEFAULT: "#FFFFFF",
       },
-      'tertiary':{
-        DEFAULT: '#FFFFFF'
+      tertiary: {
+        DEFAULT: "#FFFFFF",
       },
-      'on-tertiary':{
-        DEFAULT: '#27464E'
-      }
+      "on-tertiary": {
+        DEFAULT: "#27464E",
+      },
     },
   },
   plugins: [],
