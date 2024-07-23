@@ -1,7 +1,7 @@
 import Scrapbook from "@/app/models/scrapbook/scrapbook";
 import ScrapbookCollectionResponseData from "@/app/models/scrapbook/scrapbooksCollectionResponseData";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function useScrapbooks(): Scrapbook[] {
   const { user } = useUser();
