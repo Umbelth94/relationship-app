@@ -6,8 +6,8 @@ export default function Scrapbook() {
   return (
     <main className="h-screen w-screen">
       <div id="scrapbook-select" className="">
-        {scrapbooks.map((scrapbook) => {
-          return <div>{scrapbook.title}</div>;
+        {scrapbooks.map((scrapbook, i) => {
+          return <div key={i}>{scrapbook.title}</div>;
         })}
       </div>
     </main>

@@ -18,6 +18,6 @@ export function useScrapbooks(): Scrapbook[] {
         });
       });
     }
-  }, [user]);
+  }, [user, didFetch]);
   return scrapbooks;
 }
