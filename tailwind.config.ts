@@ -1,13 +1,13 @@
 import type { Config } from "tailwindcss";
 
 export const colors = {
-  'primary': '#27464E',
-  'on-primary': '#FEAE88',
-  'secondary': '#FEAE88',
-  'on-secondary': '#FFFFFF',
-  'tertiary': '#FFFFFF',
-  'on-tertiary': '#27464E'
-}
+  primary: "#27464E",
+  "on-primary": "#FEAE88",
+  secondary: "#FEAE88",
+  "on-secondary": "#FFFFFF",
+  tertiary: "#FFFFFF",
+  "on-tertiary": "#27464E",
+};
 
 const config: Config = {
   content: [
