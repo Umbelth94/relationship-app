@@ -1,15 +1,17 @@
-"use client";
-import { useScrapbooks } from "../hooks/photos/useScrapbooks";
+//app/scrapbook
+import { NextPage } from "next";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import ScrapbookSelect from "../components/scrapbookSelect";
 
-export default function Scrapbook() {
-  const scrapbooks = useScrapbooks();
-  return (
-    <main className="h-screen w-screen">
-      <div id="scrapbook-select" className="">
-        {scrapbooks.map((scrapbook, i) => {
-          return <div key={i}>{scrapbook.title}</div>;
-        })}
-      </div>
-    </main>
-  );
-}
+const Scrapbook: NextPage = withPageAuthRequired(
+  async () => {
+    return (
+      <main className="h-screen w-screen">
+        <ScrapbookSelect></ScrapbookSelect>
+      </main>
+    );
+  },
+  { returnTo: "/scrapbook" },
+);
+
+export default Scrapbook;
