@@ -1,11 +1,10 @@
 import client from "@/mongodb/mongodb";
 
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 //
 // eslint-disable-next-line import/no-anonymous-default-export
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextRequest) {
   try {
     const db = client.db("sample_mflix");
     const movies = await db
