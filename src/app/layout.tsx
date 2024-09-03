@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
-import Navbar from "./components/navbar";
+import TopNavbar from "component-nest/components/client/navbars/TopNavbar";
+import TextLink from "component-nest/components/client/links/TextLink";
+import { useRouter } from "next/navigation";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,12 +19,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let { user, error, isLoading } = useUser();
+  const router = useRouter();
+
   return (
     <html className="dark" lang="en">
       <title>Ourkive</title>
       <UserProvider>
         <body className={inter.className}>
-          <Navbar></Navbar>
+          <TopNavbar>
+            <TextLink
+              onClick={() =>
+                router.push(`/api/auth/${user ? "logout" : "login"}`)
+              }
+            >
+              {user ? "Logout" : "Login"}
+            </TextLink>
+          </TopNavbar>
           {children}
         </body>
       </UserProvider>
