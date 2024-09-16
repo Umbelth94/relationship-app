@@ -14,10 +14,12 @@ export default function Navbar() {
       logoPathLightMode="/ourkive_logo_transparent.png"
       logoPathDarkMode="/ourkive_logo_transparent.png"
     >
-      {}
+      {/*Scrapbook Link*/}
       {user && (
         <TextLink onClick={() => router.push(`/scrapbook`)}>Scrapbook</TextLink>
       )}
+
+      {/*My Account Link*/}
       {user && (
         <TextLink onClick={() => router.push("/myaccount")}>
           My Account
