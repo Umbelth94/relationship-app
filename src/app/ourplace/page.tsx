@@ -3,15 +3,15 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { NextPage } from "next";
 
-const DateGenerator: NextPage = withPageAuthRequired(
+const OurPlace: NextPage = withPageAuthRequired(
   async () => {
     return (
       <main className="h-screen w-screen">
-        <h1>This is just a placeholder page for the Date Generator page</h1>
+        <h1>This is just a placeholder page for the OurPlace page</h1>
       </main>
     );
   },
-  { returnTo: "/dategenerator" },
+  { returnTo: "/ourplace" },
 );
 
-export default DateGenerator;
+export default OurPlace;

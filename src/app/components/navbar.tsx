@@ -14,6 +14,10 @@ export default function Navbar() {
       logoPathLightMode="/ourkive_logo_transparent.png"
       logoPathDarkMode="/ourkive_logo_transparent.png"
     >
+      {/*Our Place Link*/}
+      {user && (
+        <TextLink onClick={() => router.push(`/ourplace`)}>OurPlace</TextLink>
+      )}
       {/*Date Picker Link*/}
       {user && (
         <TextLink onClick={() => router.push(`/dategenerator`)}>
