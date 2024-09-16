@@ -10,10 +10,20 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <TopNavbar>
+    <TopNavbar
+      logoPathLightMode="/ourkive_logo_transparent.png"
+      logoPathDarkMode="/ourkive_logo_transparent.png"
+    >
+      {}
       {user && (
         <TextLink onClick={() => router.push(`/scrapbook`)}>Scrapbook</TextLink>
       )}
+      {user && (
+        <TextLink onClick={() => router.push("/myaccount")}>
+          My Account
+        </TextLink>
+      )}
+
       {/* login/logout */}
       <TextLink
         onClick={() => router.push(`/api/auth/${user ? "logout" : "login"}`)}
