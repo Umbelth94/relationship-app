@@ -1,6 +1,8 @@
 "use client";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useRouter } from "next/navigation";
+import TopNavbar from "component-nest/components/client/navbars/TopNavbar";
+import TextLink from "component-nest/components/client/links/TextLink";
 
 export default function Navbar() {
   let { user, error, isLoading } = useUser();
@@ -8,22 +10,38 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <div className="flex w-screen h-[3.5rem] bg-primary items-center justify-end">
+    <TopNavbar
+      logoPathLightMode="/ourkive_logo_transparent.png"
+      logoPathDarkMode="/ourkive_logo_transparent.png"
+    >
+      {/*Our Place Link*/}
       {user && (
-        <button
-          className="bg-secondary hover:bg-secondary/75 rounded p-[.5rem] mx-[.5rem] text-on-secondary "
-          onClick={() => router.push(`/scrapbook`)}
-        >
-          Scrapbook
-        </button>
+        <TextLink onClick={() => router.push(`/ourplace`)}>OurPlace</TextLink>
       )}
+      {/*Date Picker Link*/}
+      {user && (
+        <TextLink onClick={() => router.push(`/dategenerator`)}>
+          Date Generator
+        </TextLink>
+      )}
+      {/*Scrapbook Link*/}
+      {user && (
+        <TextLink onClick={() => router.push(`/scrapbook`)}>Scrapbook</TextLink>
+      )}
+
+      {/*My Account Link*/}
+      {user && (
+        <TextLink onClick={() => router.push("/myaccount")}>
+          My Account
+        </TextLink>
+      )}
+
       {/* login/logout */}
-      <button
-        className="bg-secondary hover:bg-secondary/75 rounded p-[.5rem] mx-[.5rem] text-on-secondary "
+      <TextLink
         onClick={() => router.push(`/api/auth/${user ? "logout" : "login"}`)}
       >
         {user ? "Log Out" : "Login"}
-      </button>
-    </div>
+      </TextLink>
+    </TopNavbar>
   );
 }
