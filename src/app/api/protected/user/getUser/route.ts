@@ -14,7 +14,13 @@ export async function GET(req: NextRequest) {
     if (user == null) {
       return NextResponse.json({ error: "Not found" }, { status: 400 });
     }
-    return NextResponse.json(user);
+    const res = {
+      id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+    return NextResponse.json(res);
   } catch (e) {
     console.error(e);
   }
