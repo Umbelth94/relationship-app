@@ -2,8 +2,11 @@
 
 import Button from "component-nest/components/client/buttons/Button";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUserProfile } from "./hooks/useUserProfile";
+
 export default function Home() {
   let { user, error, isLoading } = useUser();
+  const userInfo = useUserProfile();
   return (
     <main className="flex-column w-screen min-h-screen">
       {user && <h1>Hello {user.name}</h1>}

@@ -1,10 +1,12 @@
 // this is just a placeholder page that does not recieve data
-
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+"use client";
 import { NextPage } from "next";
+import { useUserProfile } from "../hooks/useUserProfile";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 
 const MyAccount: NextPage = withPageAuthRequired(
-  async () => {
+  () => {
+    const userInfo = useUserProfile();
     return (
       <main className="h-screen w-screen">
         <h1>This is just a placeholder page for the MyAccount page</h1>
