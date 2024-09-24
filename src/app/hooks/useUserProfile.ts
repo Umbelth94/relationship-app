@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 //We will need to continually update this to match the basic profile information on the database
+//*Remember to update the databaseUserProfile to match this in our getUser Route*//
 interface UserProfile {
   firstName: string;
   lastName: string;
@@ -15,24 +16,22 @@ export function useUserProfile(): UserProfile | undefined {
   );
   const [isFetched, setIsFetched] = useState<boolean>(false);
 
-  let { user, error, isLoading } = useUser();
-
-  // check if the user profile exists (if it gets a 500)
   if (typeof window === "undefined") {
     return userProfile;
   }
   if (!isFetched) {
-    //If the user profile does exist, set userProfile to the userProfile from the database
     fetch(`${window.location.origin}/api/protected/user/getUser`).then(
-      (user) => {
-        user.json().then((userData) => setUserprofile(userData));
+      (data) => {
+        //Set userProfile state variable
+        if (data.status === 200) {
+          data.json().then((userData) => setUserprofile(userData));
+        }
       },
     );
+    //Set isFetched so that the function does not repeat
     setIsFetched(true);
     //TODO: In the future, set up something to retry the fetch in case of a network error
   }
-
-  //If the user profile doesn't exist (isn't found), we want to create it in the database with a post request API route
 
   return userProfile;
 }
