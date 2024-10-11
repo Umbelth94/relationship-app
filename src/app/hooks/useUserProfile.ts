@@ -33,5 +33,6 @@ export function useUserProfile(): UserProfile | undefined {
     //TODO: In the future, set up something to retry the fetch in case of a network error
   }
 
+  console.log(userProfile);
   return userProfile;
 }
