@@ -20,14 +20,12 @@ export function useUserProfile(): UserProfile | undefined {
     return userProfile;
   }
   if (!isFetched) {
-    fetch(`${window.location.origin}/api/protected/user/getUser`).then(
-      (data) => {
-        //Set userProfile state variable
-        if (data.status === 200) {
-          data.json().then((userData) => setUserprofile(userData));
-        }
-      },
-    );
+    fetch(`${window.location.origin}/api/protected/user/`).then((data) => {
+      //Set userProfile state variable
+      if (data.status === 200) {
+        data.json().then((userData) => setUserprofile(userData));
+      }
+    });
     //Set isFetched so that the function does not repeat
     setIsFetched(true);
     //TODO: In the future, set up something to retry the fetch in case of a network error

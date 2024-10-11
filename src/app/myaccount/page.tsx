@@ -9,11 +9,72 @@ const MyAccount: NextPage = withPageAuthRequired(
     const userInfo = useUserProfile();
     return (
       <main className="h-screen w-screen">
-        <h1>This is just a placeholder page for the MyAccount page</h1>
+        <form>
+          <h1>Personal Information</h1>
+          <label>First Name</label>
+          <input type="text" id="firstname" value={userInfo?.firstName} />
+          <br></br>
+          <label>Last Name</label>
+          <input type="text" id="lastname" value={userInfo?.lastName} />
+          <br></br>
+          <label>Email</label>
+          <input type="text" id="email" value={userInfo?.email} />
+          <br></br>
+          <label>Pronouns</label>
+          <input type="text" id="pronouns" />
+          <br></br>
+          <label>About Me</label>
+          <textarea id="aboutme"></textarea>
+          <br></br>
+          <label>Adress Line 1:</label>
+          <input type="text" id="line1" />
+          <br></br>
+          <label>Adress Line 2:</label>
+          <input type="text" id="line2" />
+          <br></br>
+          <label>City</label>
+          <input type="text" id="city" />
+          <br></br>
+          <label>State/Province</label>
+          {/* TODO: make this a dropdown */}
+          <input type="text" id="state" />
+          <br></br>
+          <label>Zip/Postal Code</label>
+          <input type="text" id="zip" />
+          <br></br>
+          <label>Country</label>
+          {/* TODO: make this a dropdown */}
+          <input type="text" id="country" />
+          <br></br>
+          <label>Phone Number</label>
+          <input type="tel" id="phone" />
+          <br></br>
+          <label>Birthday</label>
+          <input type="date" id="birthdate" />
+          <br></br>
+          <h1>Preferences and Interests</h1>
+          {/* TODO: Probably make these checkboxes with as many options as we can think of?  */}
+          <label>
+            Favorite Date Activities(e.g., dining out, outdoor adventures, movie
+            nights)
+          </label>
+          <textarea name="date-activities" id="date-activities"></textarea>
+          <br></br>
+          <label>Preferred Date Times (e.g. weekends, evenings)</label>
+          <textarea name="date-times" id="date-times"></textarea>
+          <br></br>
+          <label>Hobbies & Interests (e.g., reading, hiking, cooking)</label>
+          <textarea name="hobbies" id="hobbies"></textarea>
+          <br></br>
+
+          <button onClick={submit}></button>
+        </form>
       </main>
     );
   },
   { returnTo: "/myaccount" },
 );
+
+function submit();
 
 export default MyAccount;
