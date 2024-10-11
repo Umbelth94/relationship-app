@@ -9,48 +9,58 @@ const MyAccount: NextPage = withPageAuthRequired(
     const userInfo = useUserProfile();
     return (
       <main className="h-screen w-screen">
-        <form>
+        <form id="profile">
           <h1>Personal Information</h1>
           <label>First Name</label>
-          <input type="text" id="firstname" value={userInfo?.firstName} />
+          <input
+            type="text"
+            name="firstname"
+            id="firstname"
+            value={userInfo?.firstName}
+          />
           <br></br>
           <label>Last Name</label>
-          <input type="text" id="lastname" value={userInfo?.lastName} />
+          <input
+            type="text"
+            name="lastname"
+            id="lastname"
+            value={userInfo?.lastName}
+          />
           <br></br>
           <label>Email</label>
-          <input type="text" id="email" value={userInfo?.email} />
+          <input type="text" name="email" id="email" value={userInfo?.email} />
           <br></br>
           <label>Pronouns</label>
-          <input type="text" id="pronouns" />
+          <input type="text" name="pronouns" id="pronouns" />
           <br></br>
           <label>About Me</label>
-          <textarea id="aboutme"></textarea>
+          <textarea name="aboutme" id="aboutme"></textarea>
           <br></br>
           <label>Adress Line 1:</label>
-          <input type="text" id="line1" />
+          <input type="text" name="line1" id="line1" />
           <br></br>
           <label>Adress Line 2:</label>
-          <input type="text" id="line2" />
+          <input type="text" name="line2" id="line2" />
           <br></br>
           <label>City</label>
-          <input type="text" id="city" />
+          <input type="text" name="city" id="city" />
           <br></br>
           <label>State/Province</label>
           {/* TODO: make this a dropdown */}
-          <input type="text" id="state" />
+          <input type="text" name="state" id="state" />
           <br></br>
           <label>Zip/Postal Code</label>
-          <input type="text" id="zip" />
+          <input type="text" name="zip" id="zip" />
           <br></br>
           <label>Country</label>
           {/* TODO: make this a dropdown */}
-          <input type="text" id="country" />
+          <input type="text" name="country" id="country" />
           <br></br>
           <label>Phone Number</label>
-          <input type="tel" id="phone" />
+          <input type="tel" name="phone" id="phone" />
           <br></br>
           <label>Birthday</label>
-          <input type="date" id="birthdate" />
+          <input type="date" name="birthdate" id="birthdate" />
           <br></br>
           <h1>Preferences and Interests</h1>
           {/* TODO: Probably make these checkboxes with as many options as we can think of?  */}
@@ -66,15 +76,22 @@ const MyAccount: NextPage = withPageAuthRequired(
           <label>Hobbies & Interests (e.g., reading, hiking, cooking)</label>
           <textarea name="hobbies" id="hobbies"></textarea>
           <br></br>
-
-          <button onClick={submit}></button>
         </form>
+        <button onClick={submit}>Save</button>
       </main>
     );
   },
   { returnTo: "/myaccount" },
 );
 
-function submit();
+function submit() {
+  const form = document.getElementById("profile");
+  const data = new FormData(form as HTMLFormElement);
+  var object: any = {};
+  data.forEach((value, key) => {
+    object[key] = value;
+  });
+  console.log(object);
+}
 
 export default MyAccount;
