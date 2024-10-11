@@ -1,4 +1,4 @@
-// this is just a placeholder page that does not recieve data
+//TODO: Update UserProfile state after saving/updating profile into the database.
 "use client";
 import { NextPage } from "next";
 import { useUserProfile } from "../hooks/useUserProfile";
@@ -14,53 +14,102 @@ const MyAccount: NextPage = withPageAuthRequired(
           <label>First Name</label>
           <input
             type="text"
-            name="firstname"
-            id="firstname"
-            value={userInfo?.firstName}
+            name="firstName"
+            id="firstName"
+            defaultValue={userInfo?.firstName}
           />
           <br></br>
           <label>Last Name</label>
           <input
             type="text"
-            name="lastname"
-            id="lastname"
-            value={userInfo?.lastName}
+            name="lastName"
+            id="lastName"
+            defaultValue={userInfo?.lastName}
           />
           <br></br>
           <label>Email</label>
-          <input type="text" name="email" id="email" value={userInfo?.email} />
+          <input
+            type="text"
+            name="email"
+            id="email"
+            defaultValue={userInfo?.email}
+          />
           <br></br>
           <label>Pronouns</label>
-          <input type="text" name="pronouns" id="pronouns" />
+          <input
+            type="text"
+            name="pronouns"
+            id="pronouns"
+            defaultValue={userInfo?.pronouns}
+          />
           <br></br>
           <label>About Me</label>
-          <textarea name="aboutMe" id="aboutMe"></textarea>
+          <textarea
+            name="aboutMe"
+            id="aboutMe"
+            defaultValue={userInfo?.aboutMe}
+          ></textarea>
           <br></br>
           <label>Adress Line 1:</label>
-          <input type="text" name="line1" id="line1" />
+          <input
+            type="text"
+            name="line1"
+            id="line1"
+            defaultValue={userInfo?.line1}
+          />
           <br></br>
           <label>Adress Line 2:</label>
-          <input type="text" name="line2" id="line2" />
+          <input
+            type="text"
+            name="line2"
+            id="line2"
+            defaultValue={userInfo?.line2}
+          />
           <br></br>
           <label>City</label>
-          <input type="text" name="city" id="city" />
+          <input
+            type="text"
+            name="city"
+            id="city"
+            defaultValue={userInfo?.city}
+          />
           <br></br>
           <label>State/Province</label>
           {/* TODO: make this a dropdown */}
-          <input type="text" name="state" id="state" />
+          <input
+            type="text"
+            name="state"
+            id="state"
+            defaultValue={userInfo?.state}
+          />
           <br></br>
           <label>Zip/Postal Code</label>
-          <input type="text" name="zip" id="zip" />
+          <input type="text" name="zip" id="zip" defaultValue={userInfo?.zip} />
           <br></br>
           <label>Country</label>
           {/* TODO: make this a dropdown */}
-          <input type="text" name="country" id="country" />
+          <input
+            type="text"
+            name="country"
+            id="country"
+            defaultValue={userInfo?.country}
+          />
           <br></br>
           <label>Phone Number</label>
-          <input type="tel" name="phone" id="phone" />
+          <input
+            type="tel"
+            name="phone"
+            id="phone"
+            defaultValue={userInfo?.phone}
+          />
           <br></br>
           <label>Birthday</label>
-          <input type="date" name="birthDate" id="birthDate" />
+          <input
+            type="date"
+            name="birthDate"
+            id="birthDate"
+            defaultValue={userInfo?.birthDate}
+          />
           <br></br>
           <h1>Preferences and Interests</h1>
           {/* TODO: Probably make these checkboxes with as many options as we can think of?  */}
@@ -68,13 +117,25 @@ const MyAccount: NextPage = withPageAuthRequired(
             Favorite Date Activities(e.g., dining out, outdoor adventures, movie
             nights)
           </label>
-          <textarea name="dateActivities" id="dateActivities"></textarea>
+          <textarea
+            name="dateActivities"
+            id="dateActivities"
+            defaultValue={userInfo?.dateActivities}
+          ></textarea>
           <br></br>
           <label>Preferred Date Times (e.g. weekends, evenings)</label>
-          <textarea name="dateTimes" id="dateTimes"></textarea>
+          <textarea
+            name="dateTimes"
+            id="dateTimes"
+            defaultValue={userInfo?.dateTimes}
+          ></textarea>
           <br></br>
           <label>Hobbies & Interests (e.g., reading, hiking, cooking)</label>
-          <textarea name="hobbies" id="hobbies"></textarea>
+          <textarea
+            name="hobbies"
+            id="hobbies"
+            defaultValue={userInfo?.hobbies}
+          ></textarea>
           <br></br>
         </form>
         <button onClick={submit}>Save</button>
@@ -87,11 +148,14 @@ const MyAccount: NextPage = withPageAuthRequired(
 function submit() {
   const form = document.getElementById("profile");
   const data = new FormData(form as HTMLFormElement);
-  var object: any = {};
+  var formObject: any = {};
   data.forEach((value, key) => {
-    object[key] = value;
+    formObject[key] = value;
   });
-  console.log(object);
+  fetch(`${window.location.origin}/api/protected/user/`, {
+    method: "PUT",
+    body: JSON.stringify(formObject),
+  });
 }
 
 export default MyAccount;

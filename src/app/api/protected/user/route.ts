@@ -9,13 +9,36 @@ interface databaseUserProfile {
   lastName: string;
   email: string;
   _id: string;
+  aboutMe: string;
+  birthDate: string;
+  city: string;
+  country: string;
+  dateActivities: string;
+  dateTimes: string;
+  line1: string;
+  line2: string;
+  phone: string;
+  pronouns: string;
+  state: string;
+  zip: string;
+  hobbies: string;
+}
+
+export async function PUT(req: NextRequest) {
+  const session = await getSession();
+  const updatedProfile = await req.json();
+  const collection = client.db("users").collection("profiles");
+  collection.findOneAndUpdate(
+    { _id: session?.user.sub },
+    { $set: updatedProfile },
+  );
+  return NextResponse.json({}, { status: 200 });
 }
 
 //This function will search the database for a match using the Auth0 id from session and the _id in MongoDB.  If that user does not exist, it will create them and return it.
 export async function GET(req: NextRequest) {
   const session = await getSession();
   console.log("User id = " + session?.user.sub);
-  console.log(JSON.stringify(session));
   const collection = client
     .db("users")
     .collection<databaseUserProfile>("profiles");
