@@ -1,28 +1,10 @@
+import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import client from "@/mongodb/mongodb";
 import { Session, getSession } from "@auth0/nextjs-auth0";
 import { Collection, Db } from "mongodb";
 import { NextResponse, NextRequest } from "next/server";
 
 //The ONLY DIFFERENCE between this one and the one in our useUserProfile hook is the _id
-interface databaseUserProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  _id: string;
-  aboutMe: string;
-  birthDate: string;
-  city: string;
-  country: string;
-  dateActivities: string;
-  dateTimes: string;
-  line1: string;
-  line2: string;
-  phone: string;
-  pronouns: string;
-  state: string;
-  zip: string;
-  hobbies: string;
-}
 
 export async function PUT(req: NextRequest) {
   const session = await getSession();
@@ -41,7 +23,7 @@ export async function GET(req: NextRequest) {
   console.log("User id = " + session?.user.sub);
   const collection = client
     .db("users")
-    .collection<databaseUserProfile>("profiles");
+    .collection<DatabaseUserProfile>("profiles");
   try {
     return getUser(session, collection);
   } catch (e) {
@@ -52,7 +34,7 @@ export async function GET(req: NextRequest) {
 
 async function getUser(
   session: Session | null | undefined,
-  collection: Collection<databaseUserProfile>,
+  collection: Collection<DatabaseUserProfile>,
 ) {
   //Find the user in the database
   let dbUser = await collection.findOne({ _id: session?.user.sub });
@@ -74,7 +56,7 @@ async function getUser(
 
 async function createUser(
   session: Session | null | undefined,
-  collection: Collection<databaseUserProfile>,
+  collection: Collection<DatabaseUserProfile>,
 ) {
   const userProfile = {
     _id: session?.user.sub,

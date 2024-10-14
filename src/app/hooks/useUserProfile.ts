@@ -1,27 +1,9 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { UserProfile } from "../models/UserProfile";
 
 //We will need to continually update this to match the basic profile information on the database
 //*Remember to update the databaseUserProfile to match this in our getUser Route*//
-interface UserProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  id: string;
-  aboutMe: string;
-  birthDate: string;
-  city: string;
-  country: string;
-  dateActivities: string;
-  dateTimes: string;
-  line1: string;
-  line2: string;
-  phone: string;
-  pronouns: string;
-  state: string;
-  zip: string;
-  hobbies: string;
-}
 
 //TODO: Find a way to get this to fetch whenever a user's profile data is updated
 export function useUserProfile(): UserProfile | undefined {
