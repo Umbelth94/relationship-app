@@ -10,17 +10,25 @@ interface UserProfileFields {
   firstName?: string;
   lastName?: string;
   email?: string;
-  aboutMe?: string;
   birthDate?: string;
-  city?: string;
-  country?: string;
-  dateActivities?: string;
-  dateTimes?: string;
-  line1?: string;
-  line2?: string;
   phone?: string;
   pronouns?: string;
+  adress?: Adresses;
+  about?: About;
+}
+
+interface Adresses {
+  city?: string;
+  country?: string;
+  line1?: string;
+  line2?: string;
   state?: string;
   zip?: string;
+}
+
+interface About {
   hobbies?: string;
+  dateActivities?: string;
+  dateTimes?: string;
+  aboutMe?: string;
 }
