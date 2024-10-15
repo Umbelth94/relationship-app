@@ -47,7 +47,7 @@ const MyAccount: NextPage = withPageAuthRequired(
           <textarea
             name="aboutMe"
             id="aboutMe"
-            defaultValue={userInfo?.aboutMe}
+            defaultValue={userInfo?.about?.aboutMe}
           ></textarea>
           <br></br>
           <label>Adress Line 1:</label>
@@ -55,7 +55,7 @@ const MyAccount: NextPage = withPageAuthRequired(
             type="text"
             name="line1"
             id="line1"
-            defaultValue={userInfo?.line1}
+            defaultValue={userInfo?.adress?.line1}
           />
           <br></br>
           <label>Adress Line 2:</label>
@@ -63,7 +63,7 @@ const MyAccount: NextPage = withPageAuthRequired(
             type="text"
             name="line2"
             id="line2"
-            defaultValue={userInfo?.line2}
+            defaultValue={userInfo?.adress?.line2}
           />
           <br></br>
           <label>City</label>
@@ -71,7 +71,7 @@ const MyAccount: NextPage = withPageAuthRequired(
             type="text"
             name="city"
             id="city"
-            defaultValue={userInfo?.city}
+            defaultValue={userInfo?.adress?.city}
           />
           <br></br>
           <label>State/Province</label>
@@ -80,11 +80,16 @@ const MyAccount: NextPage = withPageAuthRequired(
             type="text"
             name="state"
             id="state"
-            defaultValue={userInfo?.state}
+            defaultValue={userInfo?.adress?.state}
           />
           <br></br>
           <label>Zip/Postal Code</label>
-          <input type="text" name="zip" id="zip" defaultValue={userInfo?.zip} />
+          <input
+            type="text"
+            name="zip"
+            id="zip"
+            defaultValue={userInfo?.adress?.zip}
+          />
           <br></br>
           <label>Country</label>
           {/* TODO: make this a dropdown */}
@@ -92,7 +97,7 @@ const MyAccount: NextPage = withPageAuthRequired(
             type="text"
             name="country"
             id="country"
-            defaultValue={userInfo?.country}
+            defaultValue={userInfo?.adress?.country}
           />
           <br></br>
           <label>Phone Number</label>
@@ -120,21 +125,21 @@ const MyAccount: NextPage = withPageAuthRequired(
           <textarea
             name="dateActivities"
             id="dateActivities"
-            defaultValue={userInfo?.dateActivities}
+            defaultValue={userInfo?.about?.dateActivities}
           ></textarea>
           <br></br>
           <label>Preferred Date Times (e.g. weekends, evenings)</label>
           <textarea
             name="dateTimes"
             id="dateTimes"
-            defaultValue={userInfo?.dateTimes}
+            defaultValue={userInfo?.about?.dateTimes}
           ></textarea>
           <br></br>
           <label>Hobbies & Interests (e.g., reading, hiking, cooking)</label>
           <textarea
             name="hobbies"
             id="hobbies"
-            defaultValue={userInfo?.hobbies}
+            defaultValue={userInfo?.about?.hobbies}
           ></textarea>
           <br></br>
         </form>
