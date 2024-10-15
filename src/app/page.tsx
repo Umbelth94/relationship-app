@@ -9,7 +9,7 @@ export default function Home() {
   const userInfo = useUserProfile();
   return (
     <main className="flex-column w-screen min-h-screen">
-      {user && <h1>Hello {user.name}</h1>}
+      {user && <h1>Hello {userInfo?.firstName}</h1>}
       <Button onClick={() => console.log("Hello daddy")}>I am text</Button>
     </main>
   );
