@@ -2,14 +2,16 @@
 
 import Button from "component-nest/components/client/buttons/Button";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { useUserProfile } from "./hooks/useUserProfile";
+import { useContext } from "react";
+import UserProfileProvider, {
+  UserProfileContext,
+} from "./provider/userProfileProvider";
 
 export default function Home() {
-  let { user, error, isLoading } = useUser();
-  const userInfo = useUserProfile();
+  const user = useContext(UserProfileContext);
   return (
     <main className="flex-column w-screen min-h-screen">
-      {user && <h1>Hello {userInfo?.firstName}</h1>}
+      <h1>Hello {user?.firstName}</h1>
       <Button onClick={() => console.log("Hello daddy")}>I am text</Button>
     </main>
   );

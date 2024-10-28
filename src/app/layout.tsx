@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import Navbar from "./components/navbar";
+import UserProfileProvider from "./provider/userProfileProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +20,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <title>Ourkive</title>
-      <UserProvider>
-        <body className={inter.className}>
-          <Navbar></Navbar>
-          {children}
-        </body>
-      </UserProvider>
+      <UserProfileProvider>
+        <UserProvider>
+          <body className={inter.className}>
+            <Navbar></Navbar>
+            {children}
+          </body>
+        </UserProvider>
+      </UserProfileProvider>
     </html>
   );
 }
