@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useState } from "react";
 import { UserProfile } from "../models/UserProfile";
 
 //We will need to continually update this to match the basic profile information on the database

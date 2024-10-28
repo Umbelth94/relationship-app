@@ -3,10 +3,12 @@
 import { NextPage } from "next";
 import { useUserProfile } from "../hooks/useUserProfile";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { useContext } from "react";
+import { UserProfileContext } from "../provider/userProfileProvider";
 
 const MyAccount: NextPage = withPageAuthRequired(
   () => {
-    const userInfo = useUserProfile();
+    const userInfo = useContext(UserProfileContext);
     return (
       <main className="h-screen w-screen">
         <form id="profile">

@@ -4,8 +4,6 @@ import { Session, getSession } from "@auth0/nextjs-auth0";
 import { Collection, Db } from "mongodb";
 import { NextResponse, NextRequest } from "next/server";
 
-//The ONLY DIFFERENCE between this one and the one in our useUserProfile hook is the _id
-
 export async function PUT(req: NextRequest) {
   const session = await getSession();
   const updatedProfile = await req.json();
