@@ -3,12 +3,16 @@
 import { NextPage } from "next";
 import { useUserProfile } from "../hooks/useUserProfile";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { useContext } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { UserProfileContext } from "../provider/userProfileProvider";
 
 const MyAccount: NextPage = withPageAuthRequired(
   () => {
-    const userInfo = useContext(UserProfileContext);
+    const { userProfile, rerender, setRerender } =
+      useContext(UserProfileContext);
+    let userInfo = userProfile;
+    console.log("save");
+
     return (
       <main className="h-screen w-screen">
         <form id="profile">
@@ -145,14 +149,17 @@ const MyAccount: NextPage = withPageAuthRequired(
           ></textarea>
           <br></br>
         </form>
-        <button onClick={submit}>Save</button>
+        <button onClick={() => submit(setRerender, rerender)}>Save</button>
       </main>
     );
   },
   { returnTo: "/myaccount" },
 );
 
-function submit() {
+function submit(
+  setRerender: Dispatch<SetStateAction<number>>,
+  rerender: number,
+) {
   const form = document.getElementById("profile");
   const data = new FormData(form as HTMLFormElement);
   var formObject: any = {};
@@ -162,7 +169,7 @@ function submit() {
   fetch(`${window.location.origin}/api/protected/user/`, {
     method: "PUT",
     body: JSON.stringify(formObject),
-  });
+  }).then(() => setRerender(rerender + 1));
 }
 
 export default MyAccount;
