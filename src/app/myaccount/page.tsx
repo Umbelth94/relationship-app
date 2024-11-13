@@ -1,20 +1,22 @@
 //TODO: Update UserProfile state after saving/updating profile into the database.
 "use client";
 import { NextPage } from "next";
-import { useUserProfile } from "../hooks/useUserProfile";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { UserProfileContext } from "../provider/userProfileProvider";
+import { createUserFormDataObject } from "../models/UserProfile";
 
+//Auth0 middleware that checks if the user is authenticated
 const MyAccount: NextPage = withPageAuthRequired(
   () => {
     const { userProfile, rerender, setRerender } =
       useContext(UserProfileContext);
     let userInfo = userProfile;
     console.log("save");
+    console.log(userInfo?.firstName);
 
     return (
-      <main className="h-screen w-screen">
+      <main className="h-screen w-screen dark:text-dark-font-color-1">
         <form id="profile">
           <h1>Personal Information</h1>
           <label>First Name</label>
@@ -161,14 +163,15 @@ function submit(
   rerender: number,
 ) {
   const form = document.getElementById("profile");
-  const data = new FormData(form as HTMLFormElement);
-  var formObject: any = {};
-  data.forEach((value, key) => {
-    formObject[key] = value;
-  });
+  //Puts all form input data into a formData object
+  const formData = new FormData(form as HTMLFormElement);
+  //Creates a userProfile object to submit to the database that is based off of our UserProfile Model
+  const userProfile = createUserFormDataObject(formData);
+  //Submits the userProfile via our API to the database
   fetch(`${window.location.origin}/api/protected/user/`, {
     method: "PUT",
-    body: JSON.stringify(formObject),
+    body: JSON.stringify(userProfile),
+    //This updates the userProfile state variable on our provider so that it refreshes the state
   }).then(() => setRerender(rerender + 1));
 }
 

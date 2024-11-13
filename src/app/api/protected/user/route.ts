@@ -42,14 +42,7 @@ async function getUser(
     //set user to the newly created database document
     dbUser = await collection.findOne({ _id: session?.user.sub });
   }
-  //Reformat the returned document to a new ID for easier use with our state variable
-  const res = {
-    id: dbUser?._id,
-    ...dbUser,
-  };
-  //Delete _id from the response so that we do not have duplicate/redundant id tags
-  delete res._id;
-  return NextResponse.json(res);
+  return NextResponse.json(dbUser);
 }
 
 async function createUser(

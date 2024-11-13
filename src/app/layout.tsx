@@ -20,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <title>Ourkive</title>
+      {/* Wrap the application in our custom user provider */}
       <UserProfileProvider>
+        {/* Wrap the application in the Auth0 provider for authentication  */}
         <UserProvider>
           <body className={inter.className}>
             <Navbar></Navbar>
