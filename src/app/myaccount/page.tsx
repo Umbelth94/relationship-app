@@ -4,13 +4,12 @@ import { NextPage } from "next";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { UserProfileContext } from "../provider/userProfileProvider";
-import { createUserFormDataObject } from "../models/UserProfile";
+import { createUserFormDataObject, UserProfile } from "../models/UserProfile";
 
 //Auth0 middleware that checks if the user is authenticated
 const MyAccount: NextPage = withPageAuthRequired(
   () => {
-    const { userProfile, rerender, setRerender } =
-      useContext(UserProfileContext);
+    const { userProfile, setUserProfile } = useContext(UserProfileContext);
     let userInfo = userProfile;
     console.log("save");
     console.log(userInfo?.firstName);
@@ -151,7 +150,7 @@ const MyAccount: NextPage = withPageAuthRequired(
           ></textarea>
           <br></br>
         </form>
-        <button onClick={() => submit(setRerender, rerender)}>Save</button>
+        <button onClick={() => submit(setUserProfile)}>Save</button>
       </main>
     );
   },
@@ -159,20 +158,19 @@ const MyAccount: NextPage = withPageAuthRequired(
 );
 
 function submit(
-  setRerender: Dispatch<SetStateAction<number>>,
-  rerender: number,
+  setUserProfile?: Dispatch<SetStateAction<UserProfile | undefined>>,
 ) {
   const form = document.getElementById("profile");
   //Puts all form input data into a formData object
   const formData = new FormData(form as HTMLFormElement);
   //Creates a userProfile object to submit to the database that is based off of our UserProfile Model
-  const userProfile = createUserFormDataObject(formData);
+  const userProfileForm = createUserFormDataObject(formData);
   //Submits the userProfile via our API to the database
   fetch(`${window.location.origin}/api/protected/user/`, {
     method: "PUT",
-    body: JSON.stringify(userProfile),
+    body: JSON.stringify(userProfileForm),
     //This updates the userProfile state variable on our provider so that it refreshes the state
-  }).then(() => setRerender(rerender + 1));
+  }).then(() => setUserProfile?.(userProfileForm));
 }
 
 export default MyAccount;
