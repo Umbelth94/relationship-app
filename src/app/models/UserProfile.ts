@@ -1,6 +1,4 @@
-export interface UserProfile extends UserProfileFields {}
-
-export interface DatabaseUserProfile extends UserProfileFields {
+export interface DatabaseUserProfile extends UserProfile {
   _id: string;
 }
 
@@ -31,7 +29,7 @@ export function createUserFormDataObject(formData: FormData): UserProfile {
   return userProfile;
 }
 
-interface UserProfileFields {
+export interface UserProfile {
   firstName?: string;
   lastName?: string;
   email?: string;
