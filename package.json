@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
-    "component-nest": "^1.1.35",
+    "component-nest": "^1.1.37",
     "mongodb": "^6.8.0",
-    "next": "14.2.4",
+    "next": "^14.2.18",
     "react": "^18",
     "react-dom": "^18"
   },
