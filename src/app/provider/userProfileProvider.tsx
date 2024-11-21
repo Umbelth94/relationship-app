@@ -37,7 +37,6 @@ export default function UserProfileProvider({
           data.json().then((userData) => {
             // debugger;
             if (JSON.stringify(userData) !== JSON.stringify(userProfile)) {
-              console.log("something in there");
               setUserProfile(userData);
             } else {
               return;

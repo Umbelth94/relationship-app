@@ -11,8 +11,6 @@ const MyAccount: NextPage = withPageAuthRequired(
   () => {
     const { userProfile, setUserProfile } = useContext(UserProfileContext);
     let userInfo = userProfile;
-    console.log("save");
-    console.log(userInfo?.firstName);
 
     return (
       <main className="h-screen w-screen dark:text-dark-font-color-1">
