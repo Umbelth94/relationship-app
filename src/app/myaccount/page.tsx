@@ -1,8 +1,8 @@
 //TODO: Validation, Proper Form Inputs
 //TODO: Make the button clickable
-//TODO: Display the current values for already submitted inputs
 //TODO: Make sure the form still saves to database
 //TODO: Make it look *clicks tongue* REAAALL nice, clark.
+//TODO: Profile picture integration
 "use client";
 import { NextPage } from "next";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
