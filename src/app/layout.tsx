@@ -18,7 +18,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className="text-light-font-color-1 dark:text-dark-font-color-1"
+    >
       <title>Ourkive</title>
       {/* Wrap the application in our custom user provider */}
       <UserProfileProvider>

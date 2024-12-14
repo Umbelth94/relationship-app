@@ -1,32 +1,34 @@
+import { UserProfileFields } from "../myaccount/page";
+
 export interface DatabaseUserProfile extends UserProfile {
   _id: string;
 }
 
-// Takes the form data and maps it all to a user profile object for us to submit it to the database
-export function createUserFormDataObject(formData: FormData): UserProfile {
-  const userProfile: UserProfile = {
-    firstName: formData.get("firstName") as string,
-    lastName: formData.get("lastName") as string,
-    email: formData.get("email") as string,
-    birthDate: formData.get("birthDate") as string,
-    phone: formData.get("phone") as string,
-    pronouns: formData.get("pronouns") as string,
+export function mapUserProfileFromUserProfileFields(
+  fields: UserProfileFields,
+): UserProfile {
+  return {
+    firstName: fields.firstName,
+    lastName: fields.lastName,
+    email: fields.email,
+    birthDate: fields.birthDate,
+    phone: fields.phone,
+    pronouns: fields.pronouns,
     adress: {
-      city: formData.get("city") as string,
-      country: formData.get("country") as string,
-      line1: formData.get("line1") as string,
-      line2: formData.get("line2") as string,
-      state: formData.get("state") as string,
-      zip: formData.get("zip") as string,
+      city: fields.city,
+      country: fields.country,
+      line1: fields.line1,
+      line2: fields.line2,
+      state: fields.state,
+      zip: fields.zip,
     },
     about: {
-      aboutMe: formData.get("aboutMe") as string,
-      hobbies: formData.get("hobbies") as string,
-      dateActivities: formData.get("dateActivities") as string,
-      dateTimes: formData.get("dateTimes") as string,
+      aboutMe: fields.aboutMe,
+      hobbies: fields.hobbies,
+      dateActivities: fields.dateActivities,
+      dateTimes: fields.dateTimes,
     },
   };
-  return userProfile;
 }
 
 export interface UserProfile {
