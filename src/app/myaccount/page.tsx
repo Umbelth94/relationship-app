@@ -1,4 +1,4 @@
-//TODO: Validation, Proper Form Inputs
+//TODO: Make sure it works correctly and in one submit
 //TODO: Make the button clickable
 //TODO: Make sure the form still saves to database
 //TODO: Make it look *clicks tongue* REAAALL nice, clark.
@@ -13,6 +13,7 @@ import {
   UserProfile,
 } from "../models/UserProfile";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
 export type UserProfileFields = {
   firstName: string;
@@ -64,20 +65,38 @@ const MyAccount: NextPage = withPageAuthRequired(
               </div>
               <div className="grid-cols-1 grid gap-y-[2rem]">
                 <div>
-                  <label htmlFor="firstName">First Name</label>
-                  <input
-                    placeholder="First Name"
-                    defaultValue={userProfile?.firstName}
-                    {...register("firstName", { required: true })}
-                  />
+                  <div>
+                    <label htmlFor="firstName">First Name</label>
+                    <input
+                      placeholder="First Name"
+                      defaultValue={userProfile?.firstName}
+                      {...register("firstName", {
+                        required: "This field cannot be empty",
+                        pattern: {
+                          value: /^[A-Z]+$/i,
+                          message: "Cannot have any numbers",
+                        },
+                      })}
+                    />
+                  </div>
+                  <ErrorMessage errors={errors} name="firstName" />
                 </div>
                 <div>
-                  <label htmlFor="lastName">Last Name</label>
-                  <input
-                    placeholder="Last Name"
-                    defaultValue={userProfile?.lastName}
-                    {...register("lastName", { required: true })}
-                  />
+                  <div>
+                    <label htmlFor="lastName">Last Name</label>
+                    <input
+                      placeholder="Last Name"
+                      defaultValue={userProfile?.lastName}
+                      {...register("lastName", {
+                        required: "This field cannot be empty",
+                        pattern: {
+                          value: /^[A-Z]+$/i,
+                          message: "Cannot have any numbers",
+                        },
+                      })}
+                    />
+                  </div>
+                  <ErrorMessage errors={errors} name="lastName" />
                 </div>
                 <div>
                   <label htmlFor="pronouns">Pronouns</label>
@@ -91,10 +110,14 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <label htmlFor="birthDate">Birth Date</label>
                   <input
                     placeholder="12/02/1994"
+                    type="date"
                     defaultValue={userProfile?.birthDate}
-                    {...register("birthDate")}
+                    {...register("birthDate", {
+                      required: "Birth date is required",
+                    })}
                   />
                 </div>
+                <ErrorMessage errors={errors} name="birthDate" />
               </div>
             </div>
             <hr />
@@ -107,19 +130,37 @@ const MyAccount: NextPage = withPageAuthRequired(
                 <div>
                   <label htmlFor="email">Email</label>
                   <input
+                    type="email"
                     placeholder="JaneAndJohn@doe.com"
                     defaultValue={userProfile?.email}
-                    {...register("email", { required: true })}
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Email does not match valid format",
+                      },
+                    })}
                   />
                 </div>
+                <ErrorMessage errors={errors} name="email" />
+
                 <div>
                   <label htmlFor="phone">Phone #</label>
                   <input
+                    type="phone"
                     placeholder="555-555-5555"
                     defaultValue={userProfile?.phone}
-                    {...register("phone")}
+                    {...register("phone", {
+                      required: "Phone number is required",
+                      pattern: {
+                        value:
+                          /^(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/,
+                        message: "Phone number does not match valid format",
+                      },
+                    })}
                   />
                 </div>
+                <ErrorMessage errors={errors} name="phone" />
               </div>
             </div>
             <hr />
@@ -134,8 +175,9 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <input
                     placeholder="1234 Streetname Lane"
                     defaultValue={userProfile?.adress?.line1}
-                    {...register("line1")}
+                    {...register("line1", { required: "street is required" })}
                   />
+                  <ErrorMessage errors={errors} name="line1" />
                 </div>
                 <div>
                   <label htmlFor="line2">Apartment Number</label>
@@ -151,25 +193,47 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <input
                     placeholder="Madison"
                     defaultValue={userProfile?.adress?.city}
-                    {...register("city")}
+                    {...register("city", {
+                      required: "City is required",
+                      pattern: {
+                        value: /^[a-zA-Z ]*$/i,
+                        message: "Cannot have any numbers",
+                      },
+                    })}
                   />
+                  <ErrorMessage errors={errors} name="city" />
                 </div>
                 <div>
                   <label htmlFor="state">State</label>
                   <input
                     placeholder="Wisconsin"
                     defaultValue={userProfile?.adress?.state}
-                    {...register("state")}
+                    {...register("state", {
+                      required: "State is required",
+                      pattern: {
+                        value: /^[a-zA-Z ]*$/i,
+                        message: "Cannot have any numbers",
+                      },
+                    })}
                   />
                 </div>
+                <ErrorMessage errors={errors} name="state" />
+
                 <div>
                   <label htmlFor="country">Country</label>
                   <input
                     placeholder="United States"
                     defaultValue={userProfile?.adress?.country}
-                    {...register("country")}
+                    {...register("country", {
+                      required: "Country is required",
+                      pattern: {
+                        value: /^[a-zA-Z ]*$/i,
+                        message: "Cannot have any numbers",
+                      },
+                    })}
                   />
                 </div>
+                <ErrorMessage errors={errors} name="country" />
               </div>
             </div>
             <hr />
@@ -221,6 +285,7 @@ function submit(
   userProfileFields: UserProfileFields,
 ) {
   const userProfileForm =
+    //Formats the profile field data into a userProfile object
     mapUserProfileFromUserProfileFields(userProfileFields);
   //Submits the userProfile via our API to the database
   fetch(`${window.location.origin}/api/protected/user/`, {
