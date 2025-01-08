@@ -71,7 +71,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                       placeholder="First Name"
                       defaultValue={userProfile?.firstName}
                       {...register("firstName", {
-                        required: "This field cannot be empty",
+                        required: "First Name is required",
                         pattern: {
                           value: /^[A-Z]+$/i,
                           message: "Cannot have any numbers",
@@ -88,7 +88,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                       placeholder="Last Name"
                       defaultValue={userProfile?.lastName}
                       {...register("lastName", {
-                        required: "This field cannot be empty",
+                        required: "Last Name is required",
                         pattern: {
                           value: /^[A-Z]+$/i,
                           message: "Cannot have any numbers",
@@ -113,7 +113,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                     type="date"
                     defaultValue={userProfile?.birthDate}
                     {...register("birthDate", {
-                      required: "Birth date is required",
+                      required: "Birth Date is required",
                     })}
                   />
                 </div>
@@ -175,7 +175,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <input
                     placeholder="1234 Streetname Lane"
                     defaultValue={userProfile?.adress?.line1}
-                    {...register("line1", { required: "street is required" })}
+                    {...register("line1", { required: "Street is required" })}
                   />
                   <ErrorMessage errors={errors} name="line1" />
                 </div>
