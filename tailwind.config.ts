@@ -37,6 +37,9 @@ const config: Config = {
       "on-tertiary": {
         DEFAULT: "#27464E",
       },
+      disabled: {
+        DEFAULT: "#D3D3D3",
+      },
     },
   },
   plugins: [],
