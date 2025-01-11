@@ -92,8 +92,8 @@ const MyAccount: NextPage = withPageAuthRequired(
       "bg-disabled font-bold m-3 py-2 px-4 rounded-md text-tertiary";
 
     return (
-      <main className="h-screen w-screen">
-        <div className="w-[50rem] h-fit bg-primary dark:bg-dark-1">
+      <main className="h-screen w-screen flex justify-center">
+        <div className="w-[80%] h-fit  bg-primary dark:bg-dark-1 m-">
           <form
             onSubmit={handleSubmit(onSubmit)}
             onChange={() => {
