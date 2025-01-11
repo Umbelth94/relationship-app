@@ -24,7 +24,9 @@ export default function RootLayout({
       <UserProfileProvider>
         {/* Wrap the application in the Auth0 provider for authentication  */}
         <UserProvider>
-          <body className={inter.className}>
+          <body
+            className={`${inter.className} text-light-font-color-1 dark:text-dark-font-color-1`}
+          >
             <Navbar></Navbar>
             {children}
           </body>

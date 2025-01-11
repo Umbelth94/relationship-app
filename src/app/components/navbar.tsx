@@ -3,6 +3,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { useRouter } from "next/navigation";
 import TopNavbar from "component-nest/components/client/navbars/TopNavbar";
 import TextLink from "component-nest/components/client/links/TextLink";
+import ColorModeToggle from "component-nest/components/client/buttons/ColorModeToggle";
 
 export default function Navbar() {
   let { user, error, isLoading } = useUser();
@@ -42,6 +43,7 @@ export default function Navbar() {
       >
         {user ? "Log Out" : "Login"}
       </TextLink>
+      <ColorModeToggle></ColorModeToggle>
     </TopNavbar>
   );
 }
