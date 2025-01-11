@@ -72,14 +72,14 @@ const MyAccount: NextPage = withPageAuthRequired(
     }, [userProfile, reset]);
 
     const onSubmit: SubmitHandler<UserProfileFields> = (userProfileData) => {
-      //If the fields are different than our userProfile,
+      //If the fields are different than our userProfile
       if (checkShouldSubmit()) {
         //Submits the userProfile via our API to the database
         fetch(`${window.location.origin}/api/protected/user/`, {
           method: "PUT",
           body: JSON.stringify(userProfileData),
-          //This updates the userProfile state variable on our provider so that it refreshes the state
         }).then(() => {
+          //This updates the userProfile state variable on our provider so that it refreshes the state
           setUserProfile?.(userProfileData);
         });
         setShouldSubmit(false);
