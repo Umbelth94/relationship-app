@@ -1,64 +1,105 @@
-//TODO: Make sure it works correctly and in one submit
-//TODO: Make the button clickable
 //TODO: Make sure the form still saves to database
 //TODO: Make it look *clicks tongue* REAAALL nice, clark.
 //TODO: Profile picture integration
 "use client";
 import { NextPage } from "next";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { UserProfileContext } from "../provider/userProfileProvider";
 import {
-  mapUserProfileFromUserProfileFields,
-  UserProfile,
-} from "../models/UserProfile";
-import { SubmitHandler, useForm } from "react-hook-form";
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { UserProfileContext } from "../provider/userProfileProvider";
+import { UserProfile } from "../models/UserProfile";
+import {
+  FieldErrors,
+  SubmitHandler,
+  useForm,
+  UseFormWatch,
+} from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
+import Button from "component-nest/components/client/buttons/Button";
+import { isEqual } from "@/util/isEqual";
 
 export type UserProfileFields = {
   firstName: string;
   lastName: string;
   email: string;
   pronouns: string;
-  aboutMe: string;
-  line1: string;
-  line2: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
   phone: string;
   birthDate: string;
-  dateActivities: string;
-  dateTimes: string;
-  hobbies: string;
+  about: {
+    aboutMe: string;
+    dateActivities: string;
+    dateTimes: string;
+    hobbies: string;
+  };
+  address: {
+    line1: string;
+    line2: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+  };
 };
 
 //Auth0 middleware that checks if the user is authenticated
 const MyAccount: NextPage = withPageAuthRequired(
   () => {
     const { userProfile, setUserProfile } = useContext(UserProfileContext);
+    const [shouldSubmit, setShouldSubmit] = useState<boolean>(false);
 
     const {
       register,
       handleSubmit,
       watch,
       formState: { errors },
+      reset,
+      getValues,
     } = useForm<UserProfileFields>();
 
+    //Determines whether or not the submit button will hit our API depending on if the userProfile state matches our fields.
+    const checkShouldSubmit = (): boolean => {
+      return !isEqual(userProfile, getValues());
+    };
+
+    //Sets the default values of the inputs to the userProfile state variable
+    useEffect(() => {
+      reset({ ...userProfile });
+    }, [userProfile, reset]);
+
     const onSubmit: SubmitHandler<UserProfileFields> = (userProfileData) => {
-      if (setUserProfile !== undefined) {
-        submit(setUserProfile, userProfileData);
+      //If the fields are different than our userProfile
+      if (checkShouldSubmit()) {
+        //Submits the userProfile via our API to the database
+        fetch(`${window.location.origin}/api/protected/user/`, {
+          method: "PUT",
+          body: JSON.stringify(userProfileData),
+        }).then(() => {
+          //This updates the userProfile state variable on our provider so that it refreshes the state
+          setUserProfile?.(userProfileData);
+        });
+        setShouldSubmit(false);
       }
     };
 
-    // watch is used for doing something with the value of a field, like conditional rendering
-    //console.log(watch("example"))
+    const submitEnabledCss =
+      "bg-secondary cursor-pointer hover:bg-secondary/75 text-tertiary font-bold m-3 py-2 px-4 rounded-md active:scale-[97%]";
+    const submitDisabledCss =
+      "bg-disabled font-bold m-3 py-2 px-4 rounded-md text-tertiary";
 
     return (
       <main className="h-screen w-screen">
         <div className="w-[50rem] h-fit bg-primary dark:bg-dark-1">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            onChange={() => {
+              setShouldSubmit(checkShouldSubmit());
+            }}
+          >
             <div className="flex justify-between p-6">
               <div>
                 <h2>Personal Info</h2>
@@ -69,7 +110,6 @@ const MyAccount: NextPage = withPageAuthRequired(
                     <label htmlFor="firstName">First Name</label>
                     <input
                       placeholder="First Name"
-                      defaultValue={userProfile?.firstName}
                       {...register("firstName", {
                         required: "First Name is required",
                         pattern: {
@@ -86,7 +126,6 @@ const MyAccount: NextPage = withPageAuthRequired(
                     <label htmlFor="lastName">Last Name</label>
                     <input
                       placeholder="Last Name"
-                      defaultValue={userProfile?.lastName}
                       {...register("lastName", {
                         required: "Last Name is required",
                         pattern: {
@@ -100,18 +139,13 @@ const MyAccount: NextPage = withPageAuthRequired(
                 </div>
                 <div>
                   <label htmlFor="pronouns">Pronouns</label>
-                  <input
-                    placeholder="He/She/They"
-                    defaultValue={userProfile?.pronouns}
-                    {...register("pronouns")}
-                  />
+                  <input placeholder="He/She/They" {...register("pronouns")} />
                 </div>
                 <div>
                   <label htmlFor="birthDate">Birth Date</label>
                   <input
                     placeholder="12/02/1994"
                     type="date"
-                    defaultValue={userProfile?.birthDate}
                     {...register("birthDate", {
                       required: "Birth Date is required",
                     })}
@@ -132,7 +166,6 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <input
                     type="email"
                     placeholder="JaneAndJohn@doe.com"
-                    defaultValue={userProfile?.email}
                     {...register("email", {
                       required: "Email is required",
                       pattern: {
@@ -149,7 +182,6 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <input
                     type="phone"
                     placeholder="555-555-5555"
-                    defaultValue={userProfile?.phone}
                     {...register("phone", {
                       required: "Phone number is required",
                       pattern: {
@@ -174,8 +206,9 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <label htmlFor="line1">Street</label>
                   <input
                     placeholder="1234 Streetname Lane"
-                    defaultValue={userProfile?.adress?.line1}
-                    {...register("line1", { required: "Street is required" })}
+                    {...register("address.line1", {
+                      required: "Street is required",
+                    })}
                   />
                   <ErrorMessage errors={errors} name="line1" />
                 </div>
@@ -183,8 +216,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <label htmlFor="line2">Apartment Number</label>
                   <input
                     placeholder="Apartment 1"
-                    defaultValue={userProfile?.adress?.line2}
-                    {...register("line2")}
+                    {...register("address.line2")}
                   />
                 </div>
 
@@ -192,8 +224,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <label htmlFor="city">City</label>
                   <input
                     placeholder="Madison"
-                    defaultValue={userProfile?.adress?.city}
-                    {...register("city", {
+                    {...register("address.city", {
                       required: "City is required",
                       pattern: {
                         value: /^[a-zA-Z ]*$/i,
@@ -207,8 +238,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <label htmlFor="state">State</label>
                   <input
                     placeholder="Wisconsin"
-                    defaultValue={userProfile?.adress?.state}
-                    {...register("state", {
+                    {...register("address.state", {
                       required: "State is required",
                       pattern: {
                         value: /^[a-zA-Z ]*$/i,
@@ -223,8 +253,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <label htmlFor="country">Country</label>
                   <input
                     placeholder="United States"
-                    defaultValue={userProfile?.adress?.country}
-                    {...register("country", {
+                    {...register("address.country", {
                       required: "Country is required",
                       pattern: {
                         value: /^[a-zA-Z ]*$/i,
@@ -249,29 +278,31 @@ const MyAccount: NextPage = withPageAuthRequired(
                   </label>
                   <input
                     placeholder="Long walks on the beach..."
-                    defaultValue={userProfile?.about?.dateActivities}
-                    {...register("dateActivities")}
+                    {...register("about.dateActivities")}
                   />
                 </div>
                 <div>
                   <label htmlFor="dateTimes">Favorite Time For a Date</label>
                   <input
                     placeholder="Evening, Afternoon"
-                    defaultValue={userProfile?.about?.dateTimes}
-                    {...register("dateTimes")}
+                    {...register("about.dateTimes")}
                   />
                 </div>
                 <div>
                   <label htmlFor="hobbies">Favorite Hobbies</label>
                   <input
                     placeholder="Beach Walking, Warhammer Figure Painting"
-                    defaultValue={userProfile?.about?.hobbies}
-                    {...register("hobbies")}
+                    {...register("about.hobbies")}
                   />
                 </div>
               </div>
             </div>
-            <input type="submit" />
+            <div className="flex place-content-end">
+              <input
+                className={`${shouldSubmit ? submitEnabledCss : submitDisabledCss}`}
+                type="submit"
+              />
+            </div>
           </form>
         </div>
       </main>
@@ -279,20 +310,5 @@ const MyAccount: NextPage = withPageAuthRequired(
   },
   { returnTo: "/myaccount" },
 );
-
-function submit(
-  setUserProfile: Dispatch<SetStateAction<UserProfile | undefined>>,
-  userProfileFields: UserProfileFields,
-) {
-  const userProfileForm =
-    //Formats the profile field data into a userProfile object
-    mapUserProfileFromUserProfileFields(userProfileFields);
-  //Submits the userProfile via our API to the database
-  fetch(`${window.location.origin}/api/protected/user/`, {
-    method: "PUT",
-    body: JSON.stringify(userProfileForm),
-    //This updates the userProfile state variable on our provider so that it refreshes the state
-  }).then(() => setUserProfile?.(userProfileForm));
-}
 
 export default MyAccount;
