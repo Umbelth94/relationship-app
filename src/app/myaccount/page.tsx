@@ -12,7 +12,6 @@ import {
   useState,
 } from "react";
 import { UserProfileContext } from "../provider/userProfileProvider";
-import { UserProfile } from "../models/UserProfile";
 import {
   FieldErrors,
   SubmitHandler,
@@ -93,7 +92,7 @@ const MyAccount: NextPage = withPageAuthRequired(
 
     return (
       <main className="h-screen w-screen flex justify-center">
-        <div className="w-[80%] h-fit  bg-primary dark:bg-dark-1 m-">
+        <div className="w-[80%] h-fit grid grid-cols-2  bg-primary dark:bg-dark-1 m-">
           <form
             onSubmit={handleSubmit(onSubmit)}
             onChange={() => {

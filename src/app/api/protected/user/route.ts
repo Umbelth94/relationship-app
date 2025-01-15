@@ -2,7 +2,7 @@ import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import client from "@/mongodb/mongodb";
 import { Session, getSession } from "@auth0/nextjs-auth0";
 import { Collection, Db } from "mongodb";
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req: NextRequest) {
   const session = await getSession();
