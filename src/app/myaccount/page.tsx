@@ -1,6 +1,6 @@
-//TODO: Make sure the form still saves to database
 //TODO: Make it look *clicks tongue* REAAALL nice, clark.
 //TODO: Profile picture integration
+//Clean up code, potentially move some functions into utility folders
 "use client";
 import { NextPage } from "next";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
