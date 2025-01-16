@@ -91,19 +91,20 @@ const MyAccount: NextPage = withPageAuthRequired(
       "bg-disabled font-bold m-3 py-2 px-4 rounded-md text-tertiary";
 
     return (
-      <main className="h-screen w-screen flex justify-center">
-        <div className="w-[80%] h-fit grid grid-cols-2  bg-primary dark:bg-dark-1 m-">
+      <main>
+        <div className="bg-primary p-3">
           <form
+            className="bg-secondary grid grid-cols-2 "
             onSubmit={handleSubmit(onSubmit)}
             onChange={() => {
               setShouldSubmit(checkShouldSubmit());
             }}
           >
-            <div className="flex justify-between p-6">
+            <div className="col-start-1 col-end-3 grid grid-cols-2">
               <div>
                 <h2>Personal Info</h2>
               </div>
-              <div className="grid-cols-1 grid gap-y-[2rem]">
+              <div>
                 <div>
                   <div>
                     <label htmlFor="firstName">First Name</label>
@@ -153,13 +154,13 @@ const MyAccount: NextPage = withPageAuthRequired(
                 <ErrorMessage errors={errors} name="birthDate" />
               </div>
             </div>
-            <hr />
+            <hr className="col-start-1 col-end-3" />
 
-            <div className="flex justify-between p-6">
+            <div className="col-start-1 col-end-3 grid grid-cols-2">
               <div>
                 <h2>Contact Info</h2>
               </div>
-              <div className="grid-cols-1 grid gap-y-[2rem]">
+              <div>
                 <div>
                   <label htmlFor="email">Email</label>
                   <input
@@ -194,9 +195,9 @@ const MyAccount: NextPage = withPageAuthRequired(
                 <ErrorMessage errors={errors} name="phone" />
               </div>
             </div>
-            <hr />
+            <hr className="col-start-1 col-end-3" />
 
-            <div className="flex justify-between p-6">
+            <div className="col-start-1 col-end-3 grid grid-cols-2">
               <div>
                 <h2>Address</h2>
               </div>
@@ -264,13 +265,13 @@ const MyAccount: NextPage = withPageAuthRequired(
                 <ErrorMessage errors={errors} name="country" />
               </div>
             </div>
-            <hr />
+            <hr className="col-start-1 col-end-3" />
 
-            <div className="flex justify-between p-6">
+            <div className="col-start-1 col-end-3 grid grid-cols-2">
               <div>
                 <h2>Interests</h2>
               </div>
-              <div className="grid-cols-1 grid gap-y-[2rem]">
+              <div>
                 <div>
                   <label htmlFor="dateActivities">
                     Favorite Date Activities
