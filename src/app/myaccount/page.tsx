@@ -1,4 +1,6 @@
 //TODO: Make it look *clicks tongue* REAAALL nice, clark.
+//TODO: Resize the grids so that the titles don't take up half of the space.
+//TODO: Grid out the fields and labels so that the inputs are all in a neat lil' row.
 //TODO: Profile picture integration
 //Clean up code, potentially move some functions into utility folders
 "use client";
