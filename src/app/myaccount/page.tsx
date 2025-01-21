@@ -96,19 +96,19 @@ const MyAccount: NextPage = withPageAuthRequired(
       <main>
         <div className="bg-primary p-3">
           <form
-            className="bg-secondary grid grid-cols-2 "
+            className="bg-secondary grid grid-cols-formSection "
             onSubmit={handleSubmit(onSubmit)}
             onChange={() => {
               setShouldSubmit(checkShouldSubmit());
             }}
           >
-            <div className="col-start-1 col-end-3 grid grid-cols-2">
-              <div>
-                <h2>Personal Info</h2>
-              </div>
+            <div>
+              <h2>Personal Info</h2>
+            </div>
+            <div>
               <div>
                 <div>
-                  <div>
+                  <div className="flex justify-between">
                     <label htmlFor="firstName">First Name</label>
                     <input
                       placeholder="First Name"
@@ -124,7 +124,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                   <ErrorMessage errors={errors} name="firstName" />
                 </div>
                 <div>
-                  <div>
+                  <div className="flex justify-between">
                     <label htmlFor="lastName">Last Name</label>
                     <input
                       placeholder="Last Name"
@@ -139,11 +139,11 @@ const MyAccount: NextPage = withPageAuthRequired(
                   </div>
                   <ErrorMessage errors={errors} name="lastName" />
                 </div>
-                <div>
+                <div className="flex justify-between">
                   <label htmlFor="pronouns">Pronouns</label>
                   <input placeholder="He/She/They" {...register("pronouns")} />
                 </div>
-                <div>
+                <div className="flex justify-between">
                   <label htmlFor="birthDate">Birth Date</label>
                   <input
                     placeholder="12/02/1994"

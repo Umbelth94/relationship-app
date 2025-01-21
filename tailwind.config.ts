@@ -41,6 +41,9 @@ const config: Config = {
         DEFAULT: "#D3D3D3",
       },
     },
+    gridTemplateRows: {
+      formSection: "30% auto",
+    },
   },
   plugins: [],
 };
