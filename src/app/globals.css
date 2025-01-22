@@ -8,7 +8,7 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-input {
+.text-input {
   @apply px-4 py-2 border w-60;
 }
 

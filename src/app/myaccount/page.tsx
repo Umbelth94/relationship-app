@@ -1,4 +1,5 @@
 //TODO: Make it look *clicks tongue* REAAALL nice, clark.
+//TODO: Fix the error for name, last name (check for others) that thinks spaces are numbers.  Maybe implement a function to cut off spaces from the end of string input className="text-input"
 //TODO: Resize the grids so that the titles don't take up half of the space.
 //TODO: Grid out the fields and labels so that the inputs are all in a neat lil' row.
 //TODO: Profile picture integration
@@ -111,6 +112,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                 <div className="flex justify-between">
                   <label htmlFor="firstName">First Name</label>
                   <input
+                    className="text-input"
                     placeholder="First Name"
                     {...register("firstName", {
                       required: "First Name is required",
@@ -127,6 +129,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                 <div className="flex justify-between">
                   <label htmlFor="lastName">Last Name</label>
                   <input
+                    className="text-input"
                     placeholder="Last Name"
                     {...register("lastName", {
                       required: "Last Name is required",
@@ -141,11 +144,16 @@ const MyAccount: NextPage = withPageAuthRequired(
               </div>
               <div className="flex justify-between">
                 <label htmlFor="pronouns">Pronouns</label>
-                <input placeholder="He/She/They" {...register("pronouns")} />
+                <input
+                  className="text-input"
+                  placeholder="He/She/They"
+                  {...register("pronouns")}
+                />
               </div>
               <div className="flex justify-between">
                 <label htmlFor="birthDate">Birth Date</label>
                 <input
+                  className="text-input"
                   placeholder="12/02/1994"
                   type="date"
                   {...register("birthDate", {
@@ -166,6 +174,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               <div className="flex justify-between">
                 <label htmlFor="email">Email</label>
                 <input
+                  className="text-input"
                   type="email"
                   placeholder="JaneAndJohn@doe.com"
                   {...register("email", {
@@ -182,6 +191,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               <div className="flex justify-between">
                 <label htmlFor="phone">Phone #</label>
                 <input
+                  className="text-input"
                   type="phone"
                   placeholder="555-555-5555"
                   {...register("phone", {
@@ -207,6 +217,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               <div className="flex justify-between">
                 <label htmlFor="line1">Street</label>
                 <input
+                  className="text-input"
                   placeholder="1234 Streetname Lane"
                   {...register("address.line1", {
                     required: "Street is required",
@@ -217,6 +228,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               <div className="flex justify-between">
                 <label htmlFor="line2">Apartment Number</label>
                 <input
+                  className="text-input"
                   placeholder="Apartment 1"
                   {...register("address.line2")}
                 />
@@ -225,6 +237,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               <div className="flex justify-between">
                 <label htmlFor="city">City</label>
                 <input
+                  className="text-input"
                   placeholder="Madison"
                   {...register("address.city", {
                     required: "City is required",
@@ -239,6 +252,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               <div className="flex justify-between">
                 <label htmlFor="state">State</label>
                 <input
+                  className="text-input"
                   placeholder="Wisconsin"
                   {...register("address.state", {
                     required: "State is required",
@@ -254,6 +268,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               <div className="flex justify-between">
                 <label htmlFor="country">Country</label>
                 <input
+                  className="text-input"
                   placeholder="United States"
                   {...register("address.country", {
                     required: "Country is required",
@@ -276,6 +291,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               <div className="flex justify-between">
                 <label htmlFor="dateActivities">Favorite Date Activities</label>
                 <input
+                  className="text-input"
                   placeholder="Long walks on the beach..."
                   {...register("about.dateActivities")}
                 />
@@ -283,6 +299,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               <div className="flex justify-between">
                 <label htmlFor="dateTimes">Favorite Time For a Date</label>
                 <input
+                  className="text-input"
                   placeholder="Evening, Afternoon"
                   {...register("about.dateTimes")}
                 />
@@ -290,13 +307,14 @@ const MyAccount: NextPage = withPageAuthRequired(
               <div className="flex justify-between">
                 <label htmlFor="hobbies">Favorite Hobbies</label>
                 <input
+                  className="text-input"
                   placeholder="Beach Walking, Warhammer Figure Painting"
                   {...register("about.hobbies")}
                 />
               </div>
             </div>
 
-            <div className="flex place-content-end">
+            <div className="col-start-1 col-end-3 flex place-content-end">
               <input
                 className={`${shouldSubmit ? submitEnabledCss : submitDisabledCss}`}
                 type="submit"
