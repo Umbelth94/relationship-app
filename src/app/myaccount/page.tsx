@@ -26,25 +26,25 @@ import Button from "component-nest/components/client/buttons/Button";
 import { isEqual } from "@/util/isEqual";
 
 export type UserProfileFields = {
-  firstName: String;
-  lastName: String;
-  email: String;
-  pronouns: String;
-  phone: String;
-  birthDate: String;
+  firstName: string;
+  lastName: string;
+  email: string;
+  pronouns: string;
+  phone: string;
+  birthDate: string;
   about: {
-    aboutMe: String;
-    dateActivities: String;
-    dateTimes: String;
-    hobbies: String;
+    aboutMe: string;
+    dateActivities: string;
+    dateTimes: string;
+    hobbies: string;
   };
   address: {
-    line1: String;
-    line2: String;
-    city: String;
-    state: String;
-    zip: String;
-    country: String;
+    line1: string;
+    line2: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
   };
 };
 
