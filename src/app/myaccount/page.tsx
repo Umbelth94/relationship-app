@@ -95,9 +95,9 @@ const MyAccount: NextPage = withPageAuthRequired(
 
     return (
       <main>
-        <div className="bg-primary p-48">
+        <div className="bg-primary p-5 h-screen">
           <form
-            className="bg-secondary grid grid-cols-[35%_auto] "
+            className="bg-secondary grid grid-cols-[35%_auto]"
             onSubmit={handleSubmit(onSubmit)}
             onChange={() => {
               setShouldSubmit(checkShouldSubmit());
