@@ -1,6 +1,6 @@
 //TODO: Make it look *clicks tongue* REAAALL nice, clark.
 //TODO: Fix the error for name, last name (check for others) that thinks spaces are numbers.  Maybe implement a function to cut off spaces from the end of string input className="text-input"
-//TODO: Resize the grids so that the titles don't take up half of the space.
+//TODO: Also make a regex for pronouns
 //TODO: Grid out the fields and labels so that the inputs are all in a neat lil' row.
 //TODO: Profile picture integration
 //Clean up code, potentially move some functions into utility folders
@@ -108,41 +108,39 @@ const MyAccount: NextPage = withPageAuthRequired(
             </div>
 
             <div>
-              <div>
-                <div className="flex justify-between">
-                  <label htmlFor="firstName">First Name</label>
-                  <input
-                    className="text-input"
-                    placeholder="First Name"
-                    {...register("firstName", {
-                      required: "First Name is required",
-                      pattern: {
-                        value: /^[A-Z]+$/i,
-                        message: "Cannot have any numbers",
-                      },
-                    })}
-                  />
-                </div>
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="firstName">First Name</label>
+                <input
+                  className="text-input"
+                  placeholder="First Name"
+                  {...register("firstName", {
+                    required: "First Name is required",
+                    pattern: {
+                      value: /^[A-Z]+$/i,
+                      message: "Cannot have any numbers",
+                    },
+                  })}
+                />
                 <ErrorMessage errors={errors} name="firstName" />
               </div>
-              <div>
-                <div className="flex justify-between">
-                  <label htmlFor="lastName">Last Name</label>
-                  <input
-                    className="text-input"
-                    placeholder="Last Name"
-                    {...register("lastName", {
-                      required: "Last Name is required",
-                      pattern: {
-                        value: /^[A-Z]+$/i,
-                        message: "Cannot have any numbers",
-                      },
-                    })}
-                  />
-                </div>
+
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="lastName">Last Name</label>
+                <input
+                  className="text-input"
+                  placeholder="Last Name"
+                  {...register("lastName", {
+                    required: "Last Name is required",
+                    pattern: {
+                      value: /^[A-Z]+$/i,
+                      message: "Cannot have any numbers",
+                    },
+                  })}
+                />
                 <ErrorMessage errors={errors} name="lastName" />
               </div>
-              <div className="flex justify-between">
+
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="pronouns">Pronouns</label>
                 <input
                   className="text-input"
@@ -150,7 +148,8 @@ const MyAccount: NextPage = withPageAuthRequired(
                   {...register("pronouns")}
                 />
               </div>
-              <div className="flex justify-between">
+
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="birthDate">Birth Date</label>
                 <input
                   className="text-input"
@@ -160,8 +159,8 @@ const MyAccount: NextPage = withPageAuthRequired(
                     required: "Birth Date is required",
                   })}
                 />
+                <ErrorMessage errors={errors} name="birthDate" />
               </div>
-              <ErrorMessage errors={errors} name="birthDate" />
             </div>
 
             <hr className="col-start-1 col-end-3" />
@@ -171,7 +170,7 @@ const MyAccount: NextPage = withPageAuthRequired(
             </div>
 
             <div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="email">Email</label>
                 <input
                   className="text-input"
@@ -185,10 +184,10 @@ const MyAccount: NextPage = withPageAuthRequired(
                     },
                   })}
                 />
+                <ErrorMessage errors={errors} name="email" />
               </div>
-              <ErrorMessage errors={errors} name="email" />
 
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="phone">Phone #</label>
                 <input
                   className="text-input"
@@ -214,7 +213,7 @@ const MyAccount: NextPage = withPageAuthRequired(
             </div>
 
             <div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="line1">Street</label>
                 <input
                   className="text-input"
@@ -225,7 +224,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                 />
                 <ErrorMessage errors={errors} name="line1" />
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="line2">Apartment Number</label>
                 <input
                   className="text-input"
@@ -234,7 +233,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                 />
               </div>
 
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="city">City</label>
                 <input
                   className="text-input"
@@ -249,7 +248,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                 />
                 <ErrorMessage errors={errors} name="city" />
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="state">State</label>
                 <input
                   className="text-input"
@@ -265,7 +264,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               </div>
               <ErrorMessage errors={errors} name="state" />
 
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="country">Country</label>
                 <input
                   className="text-input"
@@ -288,7 +287,7 @@ const MyAccount: NextPage = withPageAuthRequired(
               <h2>Interests</h2>
             </div>
             <div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="dateActivities">Favorite Date Activities</label>
                 <input
                   className="text-input"
@@ -296,7 +295,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                   {...register("about.dateActivities")}
                 />
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="dateTimes">Favorite Time For a Date</label>
                 <input
                   className="text-input"
@@ -304,7 +303,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                   {...register("about.dateTimes")}
                 />
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="hobbies">Favorite Hobbies</label>
                 <input
                   className="text-input"
