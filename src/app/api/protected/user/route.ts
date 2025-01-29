@@ -1,9 +1,13 @@
+//TODO: Put in better error handling for cases where the session is invalid, or if database operations fail.
+//TODO: Modify the PUT request to also include the user creation so that the GET request ONLY handles retrieving user profiles.
+
 import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import client from "@/mongodb/mongodb";
 import { Session, getSession } from "@auth0/nextjs-auth0";
 import { Collection, Db } from "mongodb";
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
+//Updates the user's profile in the database using their Auth0 ID as the identifier.  If the user exists, the profile is updated with the new data provided in the request
 export async function PUT(req: NextRequest) {
   const session = await getSession();
   const updatedProfile = await req.json();
@@ -15,7 +19,7 @@ export async function PUT(req: NextRequest) {
   return NextResponse.json({}, { status: 200 });
 }
 
-//This function will search the database for a match using the Auth0 id from session and the _id in MongoDB.  If that user does not exist, it will create them and return it.
+//Search the database for a match using the Auth0 id from session and the _id in MongoDB.  If that user does not exist, it will create them and return it.
 export async function GET(req: NextRequest) {
   const session = await getSession();
   console.log("User id = " + session?.user.sub);
@@ -30,6 +34,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
+//Checks if the user exists in the database.  If not, it calls createUser to insert a new profile and then retrieves it
 async function getUser(
   session: Session | null | undefined,
   collection: Collection<DatabaseUserProfile>,

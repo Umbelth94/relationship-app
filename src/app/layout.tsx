@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import Navbar from "./components/navbar";
 import UserProfileProvider from "./provider/userProfileProvider";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,9 +24,7 @@ export default function RootLayout({
       <UserProfileProvider>
         {/* Wrap the application in the Auth0 provider for authentication  */}
         <UserProvider>
-          <body
-            className={`${inter.className} text-light-font-color-1 dark:text-dark-font-color-1`}
-          >
+          <body>
             <Navbar></Navbar>
             {children}
           </body>

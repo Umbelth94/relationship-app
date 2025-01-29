@@ -1,6 +1,7 @@
-//TODO: Make sure the form still saves to database
 //TODO: Make it look *clicks tongue* REAAALL nice, clark.
+//TODO: Make text box fields for "hobbies/interests" section larger.
 //TODO: Profile picture integration
+//Clean up code, potentially move some functions into utility folders
 "use client";
 import { NextPage } from "next";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
@@ -12,7 +13,6 @@ import {
   useState,
 } from "react";
 import { UserProfileContext } from "../provider/userProfileProvider";
-import { UserProfile } from "../models/UserProfile";
 import {
   FieldErrors,
   SubmitHandler,
@@ -22,6 +22,7 @@ import {
 import { ErrorMessage } from "@hookform/error-message";
 import Button from "component-nest/components/client/buttons/Button";
 import { isEqual } from "@/util/isEqual";
+import { trimInputFields } from "@/util/trimInputFields";
 
 export type UserProfileFields = {
   firstName: string;
@@ -59,6 +60,7 @@ const MyAccount: NextPage = withPageAuthRequired(
       formState: { errors },
       reset,
       getValues,
+      setValue,
     } = useForm<UserProfileFields>();
 
     //Determines whether or not the submit button will hit our API depending on if the userProfile state matches our fields.
@@ -72,6 +74,7 @@ const MyAccount: NextPage = withPageAuthRequired(
     }, [userProfile, reset]);
 
     const onSubmit: SubmitHandler<UserProfileFields> = (userProfileData) => {
+      userProfileData = trimInputFields(userProfileData);
       //If the fields are different than our userProfile
       if (checkShouldSubmit()) {
         //Submits the userProfile via our API to the database
@@ -92,212 +95,231 @@ const MyAccount: NextPage = withPageAuthRequired(
       "bg-disabled font-bold m-3 py-2 px-4 rounded-md text-tertiary";
 
     return (
-      <main className="h-screen w-screen">
-        <div className="w-[50rem] h-fit bg-primary dark:bg-dark-1">
+      <main>
+        <div className="bg-primary p-5 h-screen text-primary">
           <form
+            className="bg-secondary grid grid-cols-[35%_auto]"
             onSubmit={handleSubmit(onSubmit)}
             onChange={() => {
               setShouldSubmit(checkShouldSubmit());
             }}
           >
-            <div className="flex justify-between p-6">
-              <div>
-                <h2>Personal Info</h2>
+            <div>
+              <h2>Personal Info</h2>
+            </div>
+
+            <div>
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="firstName">First Name</label>
+                <input
+                  className="text-input"
+                  placeholder="First Name"
+                  {...register("firstName", {
+                    required: "First Name is required",
+                    pattern: {
+                      value: /^^[a-zA-Z- ]+$/i,
+                      message: "Cannot have any numbers or special characters",
+                    },
+                  })}
+                />
+                <ErrorMessage errors={errors} name="firstName" />
               </div>
-              <div className="grid-cols-1 grid gap-y-[2rem]">
-                <div>
-                  <div>
-                    <label htmlFor="firstName">First Name</label>
-                    <input
-                      placeholder="First Name"
-                      {...register("firstName", {
-                        required: "First Name is required",
-                        pattern: {
-                          value: /^[A-Z]+$/i,
-                          message: "Cannot have any numbers",
-                        },
-                      })}
-                    />
-                  </div>
-                  <ErrorMessage errors={errors} name="firstName" />
-                </div>
-                <div>
-                  <div>
-                    <label htmlFor="lastName">Last Name</label>
-                    <input
-                      placeholder="Last Name"
-                      {...register("lastName", {
-                        required: "Last Name is required",
-                        pattern: {
-                          value: /^[A-Z]+$/i,
-                          message: "Cannot have any numbers",
-                        },
-                      })}
-                    />
-                  </div>
-                  <ErrorMessage errors={errors} name="lastName" />
-                </div>
-                <div>
-                  <label htmlFor="pronouns">Pronouns</label>
-                  <input placeholder="He/She/They" {...register("pronouns")} />
-                </div>
-                <div>
-                  <label htmlFor="birthDate">Birth Date</label>
-                  <input
-                    placeholder="12/02/1994"
-                    type="date"
-                    {...register("birthDate", {
-                      required: "Birth Date is required",
-                    })}
-                  />
-                </div>
+
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="lastName">Last Name</label>
+                <input
+                  className="text-input"
+                  placeholder="Last Name"
+                  {...register("lastName", {
+                    required: "Last Name is required",
+                    pattern: {
+                      value: /^[a-zA-Z- ]+$/i,
+                      message: "Cannot have any numbers or special characters",
+                    },
+                  })}
+                />
+                <ErrorMessage errors={errors} name="lastName" />
+              </div>
+
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="pronouns">Pronouns</label>
+                <input
+                  className="text-input"
+                  placeholder="He/She/They"
+                  {...register("pronouns", {
+                    pattern: {
+                      value: /^[a-zA-Z- /]+$/i,
+                      message: "Cannot have any numbers or special characters",
+                    },
+                  })}
+                />
+              </div>
+
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="birthDate">Birth Date</label>
+                <input
+                  className="text-input"
+                  placeholder="12/02/1994"
+                  type="date"
+                  {...register("birthDate", {
+                    required: "Birth Date is required",
+                  })}
+                />
                 <ErrorMessage errors={errors} name="birthDate" />
               </div>
             </div>
-            <hr />
 
-            <div className="flex justify-between p-6">
-              <div>
-                <h2>Contact Info</h2>
-              </div>
-              <div className="grid-cols-1 grid gap-y-[2rem]">
-                <div>
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    placeholder="JaneAndJohn@doe.com"
-                    {...register("email", {
-                      required: "Email is required",
-                      pattern: {
-                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                        message: "Email does not match valid format",
-                      },
-                    })}
-                  />
-                </div>
+            <hr className="col-start-1 col-end-3" />
+
+            <div>
+              <h2>Contact Info</h2>
+            </div>
+
+            <div>
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="email">Email</label>
+                <input
+                  className="text-input"
+                  type="email"
+                  placeholder="JaneAndJohn@doe.com"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Email does not match valid format",
+                    },
+                  })}
+                />
                 <ErrorMessage errors={errors} name="email" />
+              </div>
 
-                <div>
-                  <label htmlFor="phone">Phone #</label>
-                  <input
-                    type="phone"
-                    placeholder="555-555-5555"
-                    {...register("phone", {
-                      required: "Phone number is required",
-                      pattern: {
-                        value:
-                          /^(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/,
-                        message: "Phone number does not match valid format",
-                      },
-                    })}
-                  />
-                </div>
-                <ErrorMessage errors={errors} name="phone" />
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="phone">Phone #</label>
+                <input
+                  className="text-input"
+                  type="phone"
+                  placeholder="555-555-5555"
+                  {...register("phone", {
+                    required: "Phone number is required",
+                    pattern: {
+                      value:
+                        /^(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/,
+                      message: "Phone number does not match valid format",
+                    },
+                  })}
+                />
+              </div>
+              <ErrorMessage errors={errors} name="phone" />
+            </div>
+
+            <hr className="col-start-1 col-end-3" />
+
+            <div>
+              <h2>Address</h2>
+            </div>
+
+            <div>
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="line1">Street</label>
+                <input
+                  className="text-input"
+                  placeholder="1234 Streetname Lane"
+                  {...register("address.line1", {
+                    required: "Street is required",
+                  })}
+                />
+                <ErrorMessage errors={errors} name="line1" />
+              </div>
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="line2">Apartment Number</label>
+                <input
+                  className="text-input"
+                  placeholder="Apartment 1"
+                  {...register("address.line2")}
+                />
+              </div>
+
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="city">City</label>
+                <input
+                  className="text-input"
+                  placeholder="Madison"
+                  {...register("address.city", {
+                    required: "City is required",
+                    pattern: {
+                      value: /^[a-zA-Z ]*$/i,
+                      message: "Cannot have any numbers or special characters",
+                    },
+                  })}
+                />
+                <ErrorMessage errors={errors} name="city" />
+              </div>
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="state">State</label>
+                <input
+                  className="text-input"
+                  placeholder="Wisconsin"
+                  {...register("address.state", {
+                    required: "State is required",
+                    pattern: {
+                      value: /^[a-zA-Z ]*$/i,
+                      message: "Cannot have any numbers or special characters",
+                    },
+                  })}
+                />
+              </div>
+              <ErrorMessage errors={errors} name="state" />
+
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="country">Country</label>
+                <input
+                  className="text-input"
+                  placeholder="United States"
+                  {...register("address.country", {
+                    required: "Country is required",
+                    pattern: {
+                      value: /^[a-zA-Z ]*$/i,
+                      message: "Cannot have any numbers or special characters",
+                    },
+                  })}
+                />
+              </div>
+              <ErrorMessage errors={errors} name="country" />
+            </div>
+
+            <hr className="col-start-1 col-end-3" />
+
+            <div>
+              <h2>Interests</h2>
+            </div>
+            <div>
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="dateActivities">Favorite Date Activities</label>
+                <input
+                  className="text-input"
+                  placeholder="Long walks on the beach..."
+                  {...register("about.dateActivities")}
+                />
+              </div>
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="dateTimes">Favorite Time For a Date</label>
+                <input
+                  className="text-input"
+                  placeholder="Evening, Afternoon"
+                  {...register("about.dateTimes")}
+                />
+              </div>
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="hobbies">Favorite Hobbies</label>
+                <input
+                  className="text-input"
+                  placeholder="Beach Walking, Warhammer Figure Painting"
+                  {...register("about.hobbies")}
+                />
               </div>
             </div>
-            <hr />
 
-            <div className="flex justify-between p-6">
-              <div>
-                <h2>Address</h2>
-              </div>
-              <div className="grid-cols-1 grid gap-y-[2rem]">
-                <div>
-                  <label htmlFor="line1">Street</label>
-                  <input
-                    placeholder="1234 Streetname Lane"
-                    {...register("address.line1", {
-                      required: "Street is required",
-                    })}
-                  />
-                  <ErrorMessage errors={errors} name="line1" />
-                </div>
-                <div>
-                  <label htmlFor="line2">Apartment Number</label>
-                  <input
-                    placeholder="Apartment 1"
-                    {...register("address.line2")}
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="city">City</label>
-                  <input
-                    placeholder="Madison"
-                    {...register("address.city", {
-                      required: "City is required",
-                      pattern: {
-                        value: /^[a-zA-Z ]*$/i,
-                        message: "Cannot have any numbers",
-                      },
-                    })}
-                  />
-                  <ErrorMessage errors={errors} name="city" />
-                </div>
-                <div>
-                  <label htmlFor="state">State</label>
-                  <input
-                    placeholder="Wisconsin"
-                    {...register("address.state", {
-                      required: "State is required",
-                      pattern: {
-                        value: /^[a-zA-Z ]*$/i,
-                        message: "Cannot have any numbers",
-                      },
-                    })}
-                  />
-                </div>
-                <ErrorMessage errors={errors} name="state" />
-
-                <div>
-                  <label htmlFor="country">Country</label>
-                  <input
-                    placeholder="United States"
-                    {...register("address.country", {
-                      required: "Country is required",
-                      pattern: {
-                        value: /^[a-zA-Z ]*$/i,
-                        message: "Cannot have any numbers",
-                      },
-                    })}
-                  />
-                </div>
-                <ErrorMessage errors={errors} name="country" />
-              </div>
-            </div>
-            <hr />
-
-            <div className="flex justify-between p-6">
-              <div>
-                <h2>Interests</h2>
-              </div>
-              <div className="grid-cols-1 grid gap-y-[2rem]">
-                <div>
-                  <label htmlFor="dateActivities">
-                    Favorite Date Activities
-                  </label>
-                  <input
-                    placeholder="Long walks on the beach..."
-                    {...register("about.dateActivities")}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="dateTimes">Favorite Time For a Date</label>
-                  <input
-                    placeholder="Evening, Afternoon"
-                    {...register("about.dateTimes")}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="hobbies">Favorite Hobbies</label>
-                  <input
-                    placeholder="Beach Walking, Warhammer Figure Painting"
-                    {...register("about.hobbies")}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex place-content-end">
+            <div className="col-start-1 col-end-3 flex place-content-end">
               <input
                 className={`${shouldSubmit ? submitEnabledCss : submitDisabledCss}`}
                 type="submit"

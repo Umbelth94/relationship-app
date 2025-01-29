@@ -8,6 +8,10 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+.text-input {
+  @apply px-4 py-1 mx-8  border-b-2 border-l-2 border-primary w-60;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

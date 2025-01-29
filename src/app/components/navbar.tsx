@@ -12,33 +12,51 @@ export default function Navbar() {
 
   return (
     <TopNavbar
+      className="bg-primary"
       logoPathLightMode="/ourkive_logo_transparent.png"
       logoPathDarkMode="/ourkive_logo_transparent.png"
     >
       {/*Our Place Link*/}
       {user && (
-        <TextLink onClick={() => router.push(`/ourplace`)}>OurPlace</TextLink>
+        <TextLink
+          className="text-on-primary"
+          onClick={() => router.push(`/ourplace`)}
+        >
+          OurPlace
+        </TextLink>
       )}
       {/*Date Picker Link*/}
       {user && (
-        <TextLink onClick={() => router.push(`/dategenerator`)}>
+        <TextLink
+          className="text-on-primary"
+          onClick={() => router.push(`/dategenerator`)}
+        >
           Date Generator
         </TextLink>
       )}
       {/*Scrapbook Link*/}
       {user && (
-        <TextLink onClick={() => router.push(`/scrapbook`)}>Scrapbook</TextLink>
+        <TextLink
+          className="text-on-primary"
+          onClick={() => router.push(`/scrapbook`)}
+        >
+          Scrapbook
+        </TextLink>
       )}
 
       {/*My Account Link*/}
       {user && (
-        <TextLink onClick={() => router.push("/myaccount")}>
+        <TextLink
+          className="text-on-primary"
+          onClick={() => router.push("/myaccount")}
+        >
           My Account
         </TextLink>
       )}
 
       {/* login/logout */}
       <TextLink
+        className="text-on-primary"
         onClick={() => router.push(`/api/auth/${user ? "logout" : "login"}`)}
       >
         {user ? "Log Out" : "Login"}
