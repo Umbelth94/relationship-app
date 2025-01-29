@@ -1,7 +1,5 @@
 //TODO: Make it look *clicks tongue* REAAALL nice, clark.
-//TODO: Fix the error for name, last name (check for others) that thinks spaces are numbers.  Maybe implement a function to cut off spaces from the end of string input className="text-input"
-//TODO: Also make a regex for pronouns
-//TODO: Grid out the fields and labels so that the inputs are all in a neat lil' row.
+//TODO: Make text box fields for "hobbies/interests" section larger.
 //TODO: Profile picture integration
 //Clean up code, potentially move some functions into utility folders
 "use client";
@@ -24,6 +22,7 @@ import {
 import { ErrorMessage } from "@hookform/error-message";
 import Button from "component-nest/components/client/buttons/Button";
 import { isEqual } from "@/util/isEqual";
+import { trimInputFields } from "@/util/trimInputFields";
 
 export type UserProfileFields = {
   firstName: string;
@@ -61,6 +60,7 @@ const MyAccount: NextPage = withPageAuthRequired(
       formState: { errors },
       reset,
       getValues,
+      setValue,
     } = useForm<UserProfileFields>();
 
     //Determines whether or not the submit button will hit our API depending on if the userProfile state matches our fields.
@@ -74,6 +74,7 @@ const MyAccount: NextPage = withPageAuthRequired(
     }, [userProfile, reset]);
 
     const onSubmit: SubmitHandler<UserProfileFields> = (userProfileData) => {
+      userProfileData = trimInputFields(userProfileData);
       //If the fields are different than our userProfile
       if (checkShouldSubmit()) {
         //Submits the userProfile via our API to the database
@@ -116,8 +117,8 @@ const MyAccount: NextPage = withPageAuthRequired(
                   {...register("firstName", {
                     required: "First Name is required",
                     pattern: {
-                      value: /^[A-Z]+$/i,
-                      message: "Cannot have any numbers",
+                      value: /^^[a-zA-Z- ]+$/i,
+                      message: "Cannot have any numbers or special characters",
                     },
                   })}
                 />
@@ -132,8 +133,8 @@ const MyAccount: NextPage = withPageAuthRequired(
                   {...register("lastName", {
                     required: "Last Name is required",
                     pattern: {
-                      value: /^[A-Z]+$/i,
-                      message: "Cannot have any numbers",
+                      value: /^[a-zA-Z- ]+$/i,
+                      message: "Cannot have any numbers or special characters",
                     },
                   })}
                 />
@@ -145,7 +146,12 @@ const MyAccount: NextPage = withPageAuthRequired(
                 <input
                   className="text-input"
                   placeholder="He/She/They"
-                  {...register("pronouns")}
+                  {...register("pronouns", {
+                    pattern: {
+                      value: /^[a-zA-Z- /]+$/i,
+                      message: "Cannot have any numbers or special characters",
+                    },
+                  })}
                 />
               </div>
 
@@ -242,7 +248,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                     required: "City is required",
                     pattern: {
                       value: /^[a-zA-Z ]*$/i,
-                      message: "Cannot have any numbers",
+                      message: "Cannot have any numbers or special characters",
                     },
                   })}
                 />
@@ -257,7 +263,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                     required: "State is required",
                     pattern: {
                       value: /^[a-zA-Z ]*$/i,
-                      message: "Cannot have any numbers",
+                      message: "Cannot have any numbers or special characters",
                     },
                   })}
                 />
@@ -273,7 +279,7 @@ const MyAccount: NextPage = withPageAuthRequired(
                     required: "Country is required",
                     pattern: {
                       value: /^[a-zA-Z ]*$/i,
-                      message: "Cannot have any numbers",
+                      message: "Cannot have any numbers or special characters",
                     },
                   })}
                 />

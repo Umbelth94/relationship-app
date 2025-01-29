@@ -19,7 +19,7 @@ export default function Navbar() {
       {/*Our Place Link*/}
       {user && (
         <TextLink
-          className="link-text-color"
+          className="text-on-primary"
           onClick={() => router.push(`/ourplace`)}
         >
           OurPlace
@@ -28,7 +28,7 @@ export default function Navbar() {
       {/*Date Picker Link*/}
       {user && (
         <TextLink
-          className="link-text-color"
+          className="text-on-primary"
           onClick={() => router.push(`/dategenerator`)}
         >
           Date Generator
@@ -37,7 +37,7 @@ export default function Navbar() {
       {/*Scrapbook Link*/}
       {user && (
         <TextLink
-          className="link-text-color"
+          className="text-on-primary"
           onClick={() => router.push(`/scrapbook`)}
         >
           Scrapbook
@@ -47,7 +47,7 @@ export default function Navbar() {
       {/*My Account Link*/}
       {user && (
         <TextLink
-          className="link-text-color"
+          className="text-on-primary"
           onClick={() => router.push("/myaccount")}
         >
           My Account
@@ -56,7 +56,7 @@ export default function Navbar() {
 
       {/* login/logout */}
       <TextLink
-        className="link-text-color"
+        className="text-on-primary"
         onClick={() => router.push(`/api/auth/${user ? "logout" : "login"}`)}
       >
         {user ? "Log Out" : "Login"}
