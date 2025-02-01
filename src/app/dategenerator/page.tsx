@@ -3,22 +3,44 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { NextPage } from "next";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserProfileContext } from "../provider/userProfileProvider";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+
+export interface DateFormData {
+  familiarity: number;
+  private: boolean;
+  minPrice: number;
+  maxPrice: number;
+  ideas: string;
+  latitude: number;
+  longitude: number;
+}
 
 const DateGenerator: NextPage = withPageAuthRequired(
   () => {
     const { userProfile, setUserProfile } = useContext(UserProfileContext);
-    //Need context for partner account
+    const [tags, setTags] = useState<string[]>([]);
+    const [inputValue, setInputValue] = useState("");
 
-    interface DateFormData {
-      familiarity: number;
-      private: boolean;
-      minPrice: number;
-      maxPrice: number;
-      ideas: string;
-      latitude: number;
-      longitude: number;
-    }
+    const addTag = () => {
+      const trimmedValue = inputValue.trim();
+      if (trimmedValue && !tags.includes(trimmedValue)) {
+        const newTags = [...tags, trimmedValue];
+        setTags(newTags);
+        setInputValue("");
+      }
+    };
+
+    const removeTag = (tag: string) => {
+      const filteredTags = tags.filter((t) => t !== tag);
+      setTags(filteredTags);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addTag();
+      }
+    };
 
     const {
       register,
@@ -30,7 +52,21 @@ const DateGenerator: NextPage = withPageAuthRequired(
       setValue,
     } = useForm<DateFormData>();
 
-    const onSubmit: SubmitHandler<DateFormData> = (dateFormData) => {};
+    const onSubmit: SubmitHandler<DateFormData> = (dateFormData) => {
+      const submissionData = {
+        ...dateFormData,
+        tags,
+      };
+      console.log(submissionData); // Does this look correct when the form is submitted
+      fetch(`${window.location.origin}/api/protected/create-date/`, {
+        method: "Post",
+        body: JSON.stringify(submissionData),
+      }).then((resp) => {
+        resp.json().then((data) => {
+          console.log(data);
+        });
+      });
+    };
 
     return (
       <main className="h-screen w-screen bg-secondary pt-[3em]">
@@ -45,12 +81,28 @@ const DateGenerator: NextPage = withPageAuthRequired(
             What's The Vibe?
           </p>
 
-          {/* Ideas */}
+          <div className="flex flex-col gap-2">
+            {/*Render tags above input*/}
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="text-white px-2 py-1 rounded-lg text-sm cursor-pointer "
+                  onClick={() => removeTag(tag)}
+                >
+                  {tag} x
+                </span>
+              ))}
+            </div>
+          </div>
+
           <input
             type="text"
             className="border-2 border-[#747474] rounded-lg px-2"
             placeholder="Any ideas?"
-            {...register("ideas")}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <hr className="text-[#d4d4d4] my-[1em]" />
 
@@ -90,11 +142,12 @@ const DateGenerator: NextPage = withPageAuthRequired(
             />
           </div>
           <hr className="text-[#d4d4d4] my-[1em]" />
+          <input className="px-5 py-5 bg-primary" type="submit" />
         </form>
       </main>
     );
   },
-  { returnTo: "/dategenerator" },
+  { returnTo: "./dategenerator" },
 );
 
 export default DateGenerator;
