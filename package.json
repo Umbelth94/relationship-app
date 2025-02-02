@@ -17,6 +17,7 @@
     "component-nest": "^1.1.38",
     "mongodb": "^6.8.0",
     "next": "^14.2.18",
+    "openai": "^4.82.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.54.1"
