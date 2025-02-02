@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 const openai = new OpenAI();
 
-const resposneFormat = `
+const responseFormat = `
 {
     "generatedDate": {
         "activities": [
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         role: "user",
         content: `
                 Respond with a valid json object that only had the following format:
-                ${resposneFormat}
+                ${responseFormat}
 
                 Populate the response json object with activities to create a perfect date using the following information:
                 ${JSON.stringify(userProfile)}
