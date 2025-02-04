@@ -11,8 +11,7 @@ export interface DateFormData {
   minPrice: number;
   maxPrice: number;
   ideas: string;
-  latitude: number;
-  longitude: number;
+  location: string;
 }
 
 const DateGenerator: NextPage = withPageAuthRequired(
@@ -133,18 +132,18 @@ const DateGenerator: NextPage = withPageAuthRequired(
 
           {/* Location */}
           <div className="flex flex-row gap-[30px]">
-            <p>Latitude</p>
-            <input type="number" className="" {...register("longitude")} />
-            <p>-</p>
-            <p>Longitude</p>
+            <p>Location</p>
             <input
-              type="number"
-              className="border-[#d4d4d4]"
-              {...register("latitude")}
+              type="input"
+              className="border-[#747474]"
+              {...register("location")}
             />
           </div>
           <hr className="text-[#d4d4d4] my-[1em]" />
-          <input className="px-5 py-5 bg-primary" type="submit" />
+          <input
+            className="px-5 py-5 bg-primary cursor-pointer rounded-md hover:bg-primary/75 text-tertiary active:scale-[97%]"
+            type="submit"
+          />
         </form>
       </main>
     );
