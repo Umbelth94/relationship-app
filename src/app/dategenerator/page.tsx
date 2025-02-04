@@ -21,6 +21,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
     const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState("");
 
+    //Add tags function for the ideas tags input
     const addTag = () => {
       const trimmedValue = inputValue.trim();
       if (trimmedValue && !tags.includes(trimmedValue)) {
@@ -35,6 +36,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
       setTags(filteredTags);
     };
 
+    //Add tags when enter key is pressed
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -71,7 +73,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
     return (
       <main className="h-screen w-screen bg-secondary pt-[3em]">
         <form
-          className="flex flex-col gap-2 text-[#747474] bg-tertiary w-fit rounded-xl px-[2em] pb-[2em] pt-[1em] shadow-lg justify-self-center"
+          className="flex flex-col gap-2 text-[#747474] bg-tertiary w-[60%] rounded-xl px-[2em] pb-[2em] pt-[1em] shadow-lg justify-self-center"
           onSubmit={handleSubmit(onSubmit)}
           onChange={() => {
             // check if the form should submit
@@ -87,7 +89,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="text-white px-2 py-1 rounded-lg text-sm cursor-pointer "
+                  className="text-white bg-on-primary px-2 py-1 rounded-lg text-sm cursor-pointer "
                   onClick={() => removeTag(tag)}
                 >
                   {tag} x
