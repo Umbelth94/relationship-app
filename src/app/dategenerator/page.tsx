@@ -8,8 +8,7 @@ import { useContext, useEffect, useState } from "react";
 export interface DateFormData {
   familiarity: number;
   private: boolean;
-  minPrice: number;
-  maxPrice: number;
+  budget: string;
   ideas: string;
   location: string;
 }
@@ -139,6 +138,18 @@ const DateGenerator: NextPage = withPageAuthRequired(
               {...register("location")}
             />
           </div>
+
+          {/*Budget*/}
+          <div className="flex flex-row gap-[30px]">
+            <p>Budget</p>
+            <select {...register("budget")}>
+              <option value="fr">Free</option>
+              <option value="<=$25">Affordable (Up to $25)</option>
+              <option value=">=$25 and <=$100">Pricey (Up to $100)</option>
+              <option value=">=$100">Fancy (Over $100)</option>
+            </select>
+          </div>
+
           <hr className="text-[#d4d4d4] my-[1em]" />
           <input
             className="px-5 py-5 bg-primary cursor-pointer rounded-md hover:bg-primary/75 text-tertiary active:scale-[97%]"

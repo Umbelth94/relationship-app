@@ -1,3 +1,5 @@
+//TODO: Tweak open AI prompt to incorporate each specific userobject variable in a sentence instead of sending it just the json object of the user profile and form.
+
 import { DateFormData } from "@/app/dategenerator/page";
 import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import client from "@/mongodb/mongodb";
@@ -18,6 +20,7 @@ const responseFormat = `
                 "endTime": "",
                 "location": "",
                 "description": ""
+                "estimatedCost":"",
             }
         ]
     }
@@ -42,12 +45,15 @@ export async function POST(req: NextRequest) {
       {
         role: "user",
         content: `
-                Respond with a valid json object that only had the following format:
+                Respond with a valid json object that only has the following format:
                 ${responseFormat}
+
+                The familiarity input is rated on a scale from 0 to 10, where 0 is a date that is a new experience unfamiliar to the users, and 10 is an experience that they are both familiar with.  
 
                 Populate the response json object with activities to create a perfect date using the following information:
                 ${JSON.stringify(userProfile)}
 
+                
                 ${JSON.stringify(dateFormData)}
                 `,
       },
