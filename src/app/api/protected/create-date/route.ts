@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       {
         role: "user",
         content: `
-                Respond with a valid json object that only has the following format:
+                Respond with a valid json parsable string. The first character of the response should be { and the last should be }. It should have the following format:
                 ${responseFormat}
 
                 The familiarity input is rated on a scale from 0 to 10, where 0 is a date that is a new experience unfamiliar to the users, and 10 is an experience that they are both familiar with.  
@@ -62,6 +62,8 @@ export async function POST(req: NextRequest) {
   });
 
   const message = completion.choices[0].message;
-  console.log(message);
-  return NextResponse.json({ generatedDate: message }, { status: 200 });
+  return NextResponse.json(
+    { generatedDate: JSON.parse(message.content ?? "") },
+    { status: 200 },
+  );
 }

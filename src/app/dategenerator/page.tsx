@@ -13,11 +13,32 @@ export interface DateFormData {
   location: string;
 }
 
+export interface DateActivity {
+  name: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+  description: string;
+  estimatedCost: string;
+}
+
+export interface GeneratedDate {
+  activities: DateActivity[];
+}
+
 const DateGenerator: NextPage = withPageAuthRequired(
   () => {
     const { userProfile, setUserProfile } = useContext(UserProfileContext);
     const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState("");
+    const [generatedDate, setGeneratedDate] = useState<
+      undefined | GeneratedDate
+    >();
+
+    useEffect(() => {
+      console.log(generatedDate);
+    }, [generatedDate]);
 
     //Add tags function for the ideas tags input
     const addTag = () => {
@@ -63,7 +84,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
         body: JSON.stringify(submissionData),
       }).then((resp) => {
         resp.json().then((data) => {
-          console.log(data);
+          setGeneratedDate(data.generatedDate);
         });
       });
     };
