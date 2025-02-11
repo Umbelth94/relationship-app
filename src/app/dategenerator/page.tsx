@@ -4,6 +4,7 @@ import { NextPage } from "next";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserProfileContext } from "../provider/userProfileProvider";
 import { useContext, useEffect, useState } from "react";
+import DateModal from "../components/dateModal";
 
 export interface DateFormData {
   familiarity: number;
@@ -35,10 +36,6 @@ const DateGenerator: NextPage = withPageAuthRequired(
     const [generatedDate, setGeneratedDate] = useState<
       undefined | GeneratedDate
     >();
-
-    useEffect(() => {
-      console.log(generatedDate);
-    }, [generatedDate]);
 
     //Add tags function for the ideas tags input
     const addTag = () => {
@@ -91,6 +88,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
 
     return (
       <main className="h-screen w-screen bg-secondary pt-[3em]">
+        {generatedDate && <DateModal generatedDate={generatedDate}></DateModal>}
         <form
           className="flex flex-col gap-2 text-[#747474] bg-tertiary w-[60%] rounded-xl px-[2em] pb-[2em] pt-[1em] shadow-lg justify-self-center"
           onSubmit={handleSubmit(onSubmit)}

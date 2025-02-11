@@ -62,8 +62,5 @@ export async function POST(req: NextRequest) {
   });
 
   const message = completion.choices[0].message;
-  return NextResponse.json(
-    { generatedDate: JSON.parse(message.content ?? "") },
-    { status: 200 },
-  );
+  return NextResponse.json(JSON.parse(message.content ?? ""), { status: 200 });
 }
