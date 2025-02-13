@@ -36,6 +36,12 @@ const DateGenerator: NextPage = withPageAuthRequired(
     const [generatedDate, setGeneratedDate] = useState<
       undefined | GeneratedDate
     >();
+    const [generatedDateModalOpen, setGeneratedDateModalOpen] =
+      useState<boolean>(false);
+
+    useEffect(() => {
+      console.log(generatedDate);
+    }, [generatedDate]);
 
     //Add tags function for the ideas tags input
     const addTag = () => {
@@ -81,14 +87,21 @@ const DateGenerator: NextPage = withPageAuthRequired(
         body: JSON.stringify(submissionData),
       }).then((resp) => {
         resp.json().then((data) => {
+          console.log(data.generatedDate);
           setGeneratedDate(data.generatedDate);
+          setGeneratedDateModalOpen(true);
         });
       });
     };
-
     return (
       <main className="h-screen w-screen bg-secondary pt-[3em]">
-        {generatedDate && <DateModal generatedDate={generatedDate}></DateModal>}
+        {generatedDate && (
+          <DateModal
+            generatedDate={generatedDate}
+            isOpen={generatedDateModalOpen}
+            setIsOpen={setGeneratedDateModalOpen}
+          ></DateModal>
+        )}
         <form
           className="flex flex-col gap-2 text-[#747474] bg-tertiary w-[60%] rounded-xl px-[2em] pb-[2em] pt-[1em] shadow-lg justify-self-center"
           onSubmit={handleSubmit(onSubmit)}
