@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 
                 The familiarity input is rated on a scale from 0 to 10, where 0 is a date that is a new experience unfamiliar to the users, and 10 is an experience that they are both familiar with.  
 
-                Populate the response json object with activities to create a perfect date using the following information:
+                Use only real locations in the generated activities. Populate the response json object with activities to create a perfect date using the following information:
                 ${JSON.stringify(userProfile)}
 
                 

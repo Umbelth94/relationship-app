@@ -94,7 +94,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
       });
     };
     return (
-      <main className="h-screen w-screen bg-secondary pt-[3em]">
+      <main className="flex flex-col items-center h-screen w-screen bg-secondary pt-[3em]">
         {generatedDate && (
           <DateModal
             generatedDate={generatedDate}
@@ -188,6 +188,16 @@ const DateGenerator: NextPage = withPageAuthRequired(
             type="submit"
           />
         </form>
+        {!generatedDateModalOpen && generatedDate && (
+          <input
+            className="p-5 bg-primary cursor-pointer rounded-md"
+            type="button"
+            onClick={() => {
+              setGeneratedDateModalOpen(true);
+            }}
+            value="Open Date"
+          ></input>
+        )}
       </main>
     );
   },
