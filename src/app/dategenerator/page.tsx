@@ -98,6 +98,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
         {generatedDate && (
           <DateModal
             generatedDate={generatedDate}
+            setGeneratedDate={setGeneratedDate}
             isOpen={generatedDateModalOpen}
             setIsOpen={setGeneratedDateModalOpen}
           ></DateModal>

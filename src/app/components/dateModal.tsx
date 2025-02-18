@@ -1,6 +1,6 @@
-//TODO: Set up modal visibility to potentially work from page context instead of within the modal
 //TODO: Finish thumbs up thumbs down buttons and decide what we want them to actually do
-//TODO: Set up modal to close when clicking outside of the modal, and a way to bring the modal back up.
+//TODO: Better styling
+//TODO: Save entire date button
 
 "use client";
 
@@ -12,13 +12,17 @@ interface DateModalProps {
   generatedDate: GeneratedDate;
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setGeneratedDate: Dispatch<SetStateAction<GeneratedDate | undefined>>;
 }
 
 export default function DateModal({
   generatedDate,
   isOpen,
   setIsOpen,
+  setGeneratedDate,
 }: DateModalProps) {
+  if (!generatedDate) return null;
+
   return (
     <>
       {isOpen && (
@@ -40,12 +44,32 @@ export default function DateModal({
                 X
               </span>
             </div>
-            {generatedDate.activities.map((activity) => {
+            {generatedDate.activities.map((activity, index) => {
               return (
                 <div
                   key={activity.name}
-                  className=" flex flex-row justify-between border p-5 m-2 border-black/50"
+                  className=" flex relative flex-row justify-between border p-5 m-2 border-black/50"
                 >
+                  <div className="absolute top-0 right-0">
+                    <span
+                      className="border p-2 hover:pointer cursor-pointer"
+                      onClick={() => {
+                        //Remove activity from the list
+                        setGeneratedDate((date) => {
+                          if (!date) return date;
+                          const updatedActivities = date.activities.filter(
+                            (_, i) => i !== index,
+                          );
+                          //If updatedActivities is empty (no activities left) then set the generatedDate to undefined which should close the modal
+                          return updatedActivities.length > 0
+                            ? { activities: updatedActivities }
+                            : undefined;
+                        });
+                      }}
+                    >
+                      X
+                    </span>
+                  </div>
                   <div>
                     <p>{activity.name}</p>
                     <p>{activity.description}</p>
