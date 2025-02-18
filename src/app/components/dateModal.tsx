@@ -29,14 +29,14 @@ export default function DateModal({
       {isOpen && (
         <div
           id="modal-background"
-          className="flex fixed h-[100vh] w-[100vw] mt-[-3em] bg-black/75"
+          className="flex fixed inset-0 items-center justify-center h-[100vh] w-[100vw] mt-[-3em] bg-black/75"
           onClick={(event) => {
             if ((event.target as HTMLElement).id == "modal-background") {
               setIsOpen(false);
             }
           }}
         >
-          <div className="flex absolute top-[20%] right-[25%] flex-col m-auto gap-2 text-[#747474] bg-tertiary rounded-xl px-[2em] pb-[2em] pt-[1em] shadow-lg justify-self-center">
+          <div className="relative bg-tertiary rounded-xl p-6 shadow-lg w-[90%] max-w-[600px] max-h-[80vh] overflow-y-auto">
             <div className="absolute top-0 right-0">
               <span
                 className="border p-2 hover:pointer"
