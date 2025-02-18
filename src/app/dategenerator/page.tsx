@@ -4,14 +4,28 @@ import { NextPage } from "next";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserProfileContext } from "../provider/userProfileProvider";
 import { useContext, useEffect, useState } from "react";
+import DateModal from "../components/dateModal";
 
 export interface DateFormData {
   familiarity: number;
   private: boolean;
-  minPrice: number;
-  maxPrice: number;
+  budget: string;
   ideas: string;
   location: string;
+}
+
+export interface DateActivity {
+  name: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+  description: string;
+  estimatedCost: string;
+}
+
+export interface GeneratedDate {
+  activities: DateActivity[];
 }
 
 const DateGenerator: NextPage = withPageAuthRequired(
@@ -19,6 +33,15 @@ const DateGenerator: NextPage = withPageAuthRequired(
     const { userProfile, setUserProfile } = useContext(UserProfileContext);
     const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState("");
+    const [generatedDate, setGeneratedDate] = useState<
+      undefined | GeneratedDate
+    >();
+    const [generatedDateModalOpen, setGeneratedDateModalOpen] =
+      useState<boolean>(false);
+
+    useEffect(() => {
+      console.log(generatedDate);
+    }, [generatedDate]);
 
     //Add tags function for the ideas tags input
     const addTag = () => {
@@ -64,13 +87,22 @@ const DateGenerator: NextPage = withPageAuthRequired(
         body: JSON.stringify(submissionData),
       }).then((resp) => {
         resp.json().then((data) => {
-          console.log(data);
+          console.log(data.generatedDate);
+          setGeneratedDate(data.generatedDate);
+          setGeneratedDateModalOpen(true);
         });
       });
     };
-
     return (
-      <main className="h-screen w-screen bg-secondary pt-[3em]">
+      <main className="flex flex-col items-center h-screen w-screen bg-secondary pt-[3em]">
+        {generatedDate && (
+          <DateModal
+            generatedDate={generatedDate}
+            setGeneratedDate={setGeneratedDate}
+            isOpen={generatedDateModalOpen}
+            setIsOpen={setGeneratedDateModalOpen}
+          ></DateModal>
+        )}
         <form
           className="flex flex-col gap-2 text-[#747474] bg-tertiary w-[60%] rounded-xl px-[2em] pb-[2em] pt-[1em] shadow-lg justify-self-center"
           onSubmit={handleSubmit(onSubmit)}
@@ -139,12 +171,34 @@ const DateGenerator: NextPage = withPageAuthRequired(
               {...register("location")}
             />
           </div>
+
+          {/*Budget*/}
+          <div className="flex flex-row gap-[30px]">
+            <p>Budget</p>
+            <select {...register("budget")}>
+              <option value="fr">Free</option>
+              <option value="<=$25">Affordable (Up to $25)</option>
+              <option value=">=$25 and <=$100">Pricey (Up to $100)</option>
+              <option value=">=$100">Fancy (Over $100)</option>
+            </select>
+          </div>
+
           <hr className="text-[#d4d4d4] my-[1em]" />
           <input
             className="px-5 py-5 bg-primary cursor-pointer rounded-md hover:bg-primary/75 text-tertiary active:scale-[97%]"
             type="submit"
           />
         </form>
+        {!generatedDateModalOpen && generatedDate && (
+          <input
+            className="p-5 bg-primary cursor-pointer rounded-md"
+            type="button"
+            onClick={() => {
+              setGeneratedDateModalOpen(true);
+            }}
+            value="Open Date"
+          ></input>
+        )}
       </main>
     );
   },
