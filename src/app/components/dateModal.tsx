@@ -1,6 +1,7 @@
 //TODO: Finish thumbs up thumbs down buttons and decide what we want them to actually do
 //TODO: Better styling
 //TODO: Save entire date button
+//TODO: Make component specifically for each activity card
 
 "use client";
 
@@ -50,26 +51,6 @@ export default function DateModal({
                   key={activity.name}
                   className=" flex relative flex-row justify-between border p-5 m-2 border-black/50"
                 >
-                  <div className="absolute top-0 right-0">
-                    <span
-                      className="border p-2 hover:pointer cursor-pointer"
-                      onClick={() => {
-                        //Remove activity from the list
-                        setGeneratedDate((date) => {
-                          if (!date) return date;
-                          const updatedActivities = date.activities.filter(
-                            (_, i) => i !== index,
-                          );
-                          //If updatedActivities is empty (no activities left) then set the generatedDate to undefined which should close the modal
-                          return updatedActivities.length > 0
-                            ? { activities: updatedActivities }
-                            : undefined;
-                        });
-                      }}
-                    >
-                      X
-                    </span>
-                  </div>
                   <div>
                     <p>{activity.name}</p>
                     <p>{activity.description}</p>
@@ -83,7 +64,22 @@ export default function DateModal({
                       <ThumbsUp selected={false}></ThumbsUp>
                     </div>
                     <div>
-                      <ThumbsDown selected={false}></ThumbsDown>
+                      <ThumbsDown
+                        selected={false}
+                        onClick={() => {
+                          //Remove activity from the list
+                          setGeneratedDate((date) => {
+                            if (!date) return date;
+                            const updatedActivities = date.activities.filter(
+                              (_, i) => i !== index,
+                            );
+                            //If updatedActivities is empty (no activities left) then set the generatedDate to undefined which should close the modal
+                            return updatedActivities.length > 0
+                              ? { activities: updatedActivities }
+                              : undefined;
+                          });
+                        }}
+                      ></ThumbsDown>
                     </div>
                   </div>
                 </div>
