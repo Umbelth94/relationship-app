@@ -82,7 +82,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
         tags,
       };
       console.log(submissionData); // Does this look correct when the form is submitted
-      fetch(`${window.location.origin}/api/protected/create-date/`, {
+      fetch(`${window.location.origin}/api/protected/generate-date/`, {
         method: "Post",
         body: JSON.stringify(submissionData),
       }).then((resp) => {
