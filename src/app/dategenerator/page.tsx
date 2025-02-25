@@ -176,7 +176,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
           <div className="flex flex-row gap-[30px]">
             <p>Budget</p>
             <select {...register("budget")}>
-              <option value="fr">Free</option>
+              <option value="free">Free</option>
               <option value="<=$25">Affordable (Up to $25)</option>
               <option value=">=$25 and <=$100">Pricey (Up to $100)</option>
               <option value=">=$100">Fancy (Over $100)</option>

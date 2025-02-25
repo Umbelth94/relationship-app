@@ -1,5 +1,5 @@
 //TODO: Tweak open AI prompt to incorporate each specific userobject variable in a sentence instead of sending it just the json object of the user profile and form.
-
+//TODO: Consider more details that we could add to generated activities
 import { DateFormData } from "@/app/dategenerator/page";
 import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import client from "@/mongodb/mongodb";
@@ -33,10 +33,16 @@ export async function POST(req: NextRequest) {
   const collection = client
     .db("users")
     .collection<DatabaseUserProfile>("profiles");
-  let userProfile = collection.findOne<DatabaseUserProfile>({
+  let userProfile = await collection.findOne<DatabaseUserProfile>({
     _id: session?.user.sub,
   });
-  console.log(userProfile);
+
+  let location = "";
+  if (dateFormData.location === undefined) {
+    location = dateFormData.location;
+  } else {
+    location = `${userProfile?.address?.city}, ${userProfile?.address?.state}`;
+  }
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -50,11 +56,20 @@ export async function POST(req: NextRequest) {
 
                 The familiarity input is rated on a scale from 0 to 10, where 0 is a date that is a new experience unfamiliar to the users, and 10 is an experience that they are both familiar with.  
 
-                Use only real locations in the generated activities. Populate the response json object with activities to create a perfect date using the following information:
-                ${JSON.stringify(userProfile)}
+                Use only real locations in the generated activities. Populate the response json object with activities to create a perfect date using the following groups of information:
+                Some ideas that the user has already suggested include ${dateFormData.ideas}.
+                The location of the date should be in or near ${location}.
+                The familiarity rating is ${dateFormData.familiarity}.
+                The amount of money they want to spend is ${dateFormData.budget}.
+                The date should be ${dateFormData.private ? "private" : "public"}.
 
-                
-                ${JSON.stringify(dateFormData)}
+                Here is some more information about the user that can help guide your decision making:
+                This is their about me section [${userProfile?.about?.aboutMe}].
+                Their favorite date activity or activities are ${userProfile?.about?.dateActivities}.
+                Their ideal time of day for a date is ${userProfile?.about?.dateTimes}.
+                Their favorite hobby or hobbies are ${userProfile?.about?.hobbies}.
+
+
                 `,
       },
     ],

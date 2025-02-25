@@ -294,6 +294,14 @@ const MyAccount: NextPage = withPageAuthRequired(
             </div>
             <div>
               <div className="flex justify-between items-center my-5">
+                <label htmlFor="aboutMe">About Me</label>
+                <input
+                  className="text-input"
+                  placeholder="I'm just trying to vibe out"
+                  {...register("about.aboutMe")}
+                />
+              </div>
+              <div className="flex justify-between items-center my-5">
                 <label htmlFor="dateActivities">Favorite Date Activities</label>
                 <input
                   className="text-input"
