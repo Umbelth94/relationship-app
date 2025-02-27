@@ -1,4 +1,5 @@
 //TODO: Add some more personal info.  Favorite bands, favorite movies, etc.
+//TODO: Add a proximity choice in the form?
 //TODO: Make text box fields for "hobbies/interests" section larger.
 //TODO: Profile picture integration
 //Clean up code, potentially move some functions into utility folders

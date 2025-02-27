@@ -1,4 +1,3 @@
-//TODO: Tweak open AI prompt to incorporate each specific userobject variable in a sentence instead of sending it just the json object of the user profile and form.
 //TODO: Consider more details that we could add to generated activities
 import { DateFormData } from "@/app/dategenerator/page";
 import { DatabaseUserProfile } from "@/app/models/UserProfile";
@@ -44,31 +43,36 @@ export async function POST(req: NextRequest) {
     location = `${userProfile?.address?.city}, ${userProfile?.address?.state}`;
   }
 
+  console.log(dateFormData.tags);
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "gpt-4o",
     messages: [
-      { role: "system", content: "You are a helpful assistant." },
+      {
+        role: "system",
+        content:
+          "You are a helpful friend that knows alot about activities that a couple should do together.",
+      },
       {
         role: "user",
         content: `
-                Respond with a valid json parsable string. The first character of the response should be { and the last should be }. It should have the following format:
+                Respond with a valid json parsable string. do not put the word "json" at the beginning of the response. Respond with only a single valid json object. The first character of the response should be { and the last should be }. It should have the following format:
                 ${responseFormat}
 
-                The familiarity input is rated on a scale from 0 to 10, where 0 is a date that is a new experience unfamiliar to the users, and 10 is an experience that they are both familiar with.  
+                
 
                 Use only real locations in the generated activities. Populate the response json object with activities to create a perfect date using the following groups of information:
-                Some ideas that the user has already suggested include ${dateFormData.ideas}.
+                The following are some ideas to use, but the system should come up with ideas of it's own as well ${dateFormData.tags}.
                 The location of the date should be in or near ${location}.
-                The familiarity rating is ${dateFormData.familiarity}.
                 The amount of money they want to spend is ${dateFormData.budget}.
                 The date should be ${dateFormData.private ? "private" : "public"}.
-
+                
                 Here is some more information about the user that can help guide your decision making:
                 This is their about me section [${userProfile?.about?.aboutMe}].
                 Their favorite date activity or activities are ${userProfile?.about?.dateActivities}.
                 Their ideal time of day for a date is ${userProfile?.about?.dateTimes}.
                 Their favorite hobby or hobbies are ${userProfile?.about?.hobbies}.
-
+                
+                For the following familiarity rating, 10 is a familiar activity which relates to the users hobbies and favorite date activities. 0 is something new which does not relate to the user and so the generated activities should be completely unrelated to their interests or hobbies.  The users selected familiarity rating is ${dateFormData.familiarity}.
 
                 `,
       },

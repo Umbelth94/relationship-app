@@ -10,8 +10,8 @@ export interface DateFormData {
   familiarity: number;
   private: boolean;
   budget: string;
-  ideas: string;
   location: string;
+  tags: string[];
 }
 
 export interface DateActivity {
@@ -176,6 +176,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
           <div className="flex flex-row gap-[30px]">
             <p>Budget</p>
             <select {...register("budget")}>
+              <option value="Any price">Any Price</option>
               <option value="free">Free</option>
               <option value="<=$25">Affordable (Up to $25)</option>
               <option value=">=$25 and <=$100">Pricey (Up to $100)</option>
