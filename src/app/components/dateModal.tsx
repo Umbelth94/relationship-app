@@ -1,13 +1,12 @@
 //TODO: Finish thumbs up thumbs down buttons and decide what we want them to actually do
 //TODO: Better styling
 //TODO: Save entire date button
-//TODO: Make component specifically for each activity card
 
 "use client";
 
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { DateActivity, GeneratedDate } from "../dategenerator/page";
-import { ThumbsDown, ThumbsUp } from "../icons/icons";
+import ActivityCard from "./activityCard";
 
 interface DateModalProps {
   generatedDate: GeneratedDate;
@@ -47,42 +46,11 @@ export default function DateModal({
             </div>
             {generatedDate.activities.map((activity, index) => {
               return (
-                <div
-                  key={activity.name}
-                  className=" flex relative flex-row justify-between border p-5 m-2 border-black/50"
-                >
-                  <div>
-                    <p>{activity.name}</p>
-                    <p>{activity.description}</p>
-                    <p>{activity.location}</p>
-                    <p>{activity.estimatedCost}</p>
-                    <p>{activity.startTime}</p>
-                    <p>{activity.endTime}</p>
-                  </div>
-                  <div className="flex flex-row gap-2">
-                    <div>
-                      <ThumbsUp selected={false}></ThumbsUp>
-                    </div>
-                    <div>
-                      <ThumbsDown
-                        selected={false}
-                        onClick={() => {
-                          //Remove activity from the list
-                          setGeneratedDate((date) => {
-                            if (!date) return date;
-                            const updatedActivities = date.activities.filter(
-                              (_, i) => i !== index,
-                            );
-                            //If updatedActivities is empty (no activities left) then set the generatedDate to undefined which should close the modal
-                            return updatedActivities.length > 0
-                              ? { activities: updatedActivities }
-                              : undefined;
-                          });
-                        }}
-                      ></ThumbsDown>
-                    </div>
-                  </div>
-                </div>
+                <ActivityCard
+                  setGeneratedDate={setGeneratedDate}
+                  activity={activity}
+                  index={index}
+                ></ActivityCard>
               );
             })}
           </div>

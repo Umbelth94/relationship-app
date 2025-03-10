@@ -1,4 +1,5 @@
 //TODO: Add some more personal info.  Favorite bands, favorite movies, etc.
+//TODO: Add a proximity choice in the form?
 //TODO: Make text box fields for "hobbies/interests" section larger.
 //TODO: Profile picture integration
 //Clean up code, potentially move some functions into utility folders
@@ -293,6 +294,14 @@ const MyAccount: NextPage = withPageAuthRequired(
               <h2>Interests</h2>
             </div>
             <div>
+              <div className="flex justify-between items-center my-5">
+                <label htmlFor="aboutMe">About Me</label>
+                <input
+                  className="text-input"
+                  placeholder="I'm just trying to vibe out"
+                  {...register("about.aboutMe")}
+                />
+              </div>
               <div className="flex justify-between items-center my-5">
                 <label htmlFor="dateActivities">Favorite Date Activities</label>
                 <input
