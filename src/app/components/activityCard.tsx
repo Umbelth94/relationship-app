@@ -1,3 +1,7 @@
+//Set it up so that upvote sets activity.voteStatus to upvote so that it can get saved into database as such
+//Set up downvote to automatically save that activity name into database
+//
+
 "use client";
 
 import React, { Dispatch, SetStateAction, useState } from "react";

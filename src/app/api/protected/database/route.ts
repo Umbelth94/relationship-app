@@ -6,7 +6,7 @@ import { NextResponse, NextRequest } from "next/server";
 // eslint-disable-next-line import/no-anonymous-default-export
 export async function GET(req: NextRequest) {
   try {
-    const db = client.db("sample_mflix");
+    const db = client.db("users");
     const movies = await db
       .collection("movies")
       .find({})

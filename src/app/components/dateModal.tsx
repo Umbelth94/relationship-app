@@ -7,6 +7,7 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { DateActivity, GeneratedDate } from "../dategenerator/page";
 import ActivityCard from "./activityCard";
+import { ObjectId, Collection, Db } from "mongodb";
 
 interface DateModalProps {
   generatedDate: GeneratedDate;
@@ -53,6 +54,14 @@ export default function DateModal({
                 ></ActivityCard>
               );
             })}
+          </div>
+          <div className="p-5 bg-primary cursor-pointer rounded-md">
+            <input
+              type="button"
+              onClick={() => {
+                console.log("save date");
+              }}
+            />
           </div>
         </div>
       )}
