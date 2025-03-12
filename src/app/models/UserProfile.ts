@@ -17,6 +17,7 @@ export interface UserProfile {
   address?: Addresses;
   about?: About;
   activityIds?: ObjectId[];
+  userDates?: ObjectId[];
 }
 
 interface Addresses {
