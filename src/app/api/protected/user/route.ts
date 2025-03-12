@@ -12,7 +12,7 @@ export async function PUT(req: NextRequest) {
   const session = await getSession();
   const updatedProfile = await req.json();
   const collection = client.db("users").collection("profiles");
-  collection.findOneAndUpdate(
+  await collection.findOneAndUpdate(
     { _id: session?.user.sub },
     { $set: updatedProfile },
   );

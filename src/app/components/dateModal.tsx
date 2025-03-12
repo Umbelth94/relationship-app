@@ -7,7 +7,6 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { DateActivity, GeneratedDate } from "../dategenerator/page";
 import ActivityCard from "./activityCard";
-import { ObjectId, Collection, Db } from "mongodb";
 
 interface DateModalProps {
   generatedDate: GeneratedDate;

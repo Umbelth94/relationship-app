@@ -1,34 +1,88 @@
 import client from "@/mongodb/mongodb";
-import { NextApiRequest, NextApiResponse } from "next";
 import { DateActivity } from "../../../dategenerator/page";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import { getSession } from "@auth0/nextjs-auth0";
-import { ObjectId } from "mongodb";
+import { InsertManyResult, ObjectId } from "mongodb";
 
-// Saves activities for the user.
-// Returns true if all activities were saved.
-async function saveActivitiesToMongo(
+interface UserActivity {
+  userId: string;
+  name: string;
+  startDateTime: Date;
+  endDateTime: Date;
+  location: string;
+  description: string;
+  estimatedCost: string;
+  rank: number;
+}
+
+// insert all activity objects with associated user profile object.
+// @returns: awaitable insert InsertManyResult
+async function insertActivities(
   userProfile: DatabaseUserProfile,
   activities: DateActivity[],
-): Promise<boolean> {
-  const activityCollection = client.db("users").collection("activities");
-  console.log(userProfile._id);
-  const savedActivities = await activityCollection.insertMany(
+): Promise<InsertManyResult<UserActivity>> {
+  const activityCollection = client
+    .db("users")
+    .collection<UserActivity>("activities");
+  return activityCollection.insertMany(
     activities.map((activity) => ({
       userId: userProfile._id,
       name: activity.name,
-      calendarDate: activity.calendardate,
-      startTime: activity.startTime,
-      endTime: activity.endTime,
+      startDateTime: activity.startDateTime,
+      endDateTime: activity.endDateTime,
       location: activity.location,
       description: activity.description,
       estimatedCost: activity.estimatedCost,
       rank: 0, // -1 disliked, 0 neutral, 1 liked
     })),
   );
+}
 
-  return Promise.resolve(savedActivities?.insertedCount == activities.length);
+// Update DatabaseUserProfile with activityIds. If the user already has activityIds they are appended,
+// otherwise a new activityIds array is added to the DatabaseUserProfile.
+// @returns: awaitable UpdateResult
+async function updateUserProfileActivities(
+  activityIds: ObjectId[],
+  userProfile: DatabaseUserProfile,
+) {
+  if (userProfile.activityIds) {
+    userProfile.activityIds.push(...activityIds);
+  } else {
+    userProfile.activityIds = activityIds;
+  }
+  const userProfileColleciton = client
+    .db("users")
+    .collection<DatabaseUserProfile>("profiles");
+
+  return userProfileColleciton.updateOne(
+    { _id: userProfile._id },
+    { $set: userProfile },
+  );
+}
+
+// Saves activities for the user.
+// Returns true if all activities were saved, and the user profile was updated.
+async function saveActivitiesToMongo(
+  userProfile: DatabaseUserProfile,
+  activities: DateActivity[],
+): Promise<boolean> {
+  const insertActivitiesResult = await insertActivities(
+    userProfile,
+    activities,
+  );
+  const insertedActivityIds = Object.values(
+    insertActivitiesResult.insertedIds,
+  ) as ObjectId[];
+  const updateUserProfileResult = await updateUserProfileActivities(
+    insertedActivityIds,
+    userProfile,
+  );
+
+  return Promise.resolve(
+    insertActivitiesResult?.insertedCount == activities.length &&
+      updateUserProfileResult.modifiedCount == 1,
+  );
 }
 
 export async function POST(req: Request) {
@@ -44,8 +98,6 @@ export async function POST(req: Request) {
     .collection<DatabaseUserProfile>("profiles");
 
   let userProfile = await profileCollection.findOne({ _id: session?.user.sub });
-
-  console.log("userProfile", userProfile);
 
   if (!userProfile) {
     return new NextResponse("", { status: 401 });
@@ -66,5 +118,3 @@ export async function POST(req: Request) {
     });
   }
 }
-
-export async function GET(req: NextApiRequest, res: NextApiResponse) {}

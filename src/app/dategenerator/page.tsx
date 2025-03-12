@@ -16,9 +16,8 @@ export interface DateFormData {
 
 export interface DateActivity {
   name: string;
-  calendardate: string;
-  startTime: string;
-  endTime: string;
+  startDateTime: Date;
+  endDateTime: Date;
   location: string;
   description: string;
   estimatedCost: string;

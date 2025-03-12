@@ -16,6 +16,7 @@ export interface UserProfile {
   pronouns?: string;
   address?: Addresses;
   about?: About;
+  activityIds?: ObjectId[];
 }
 
 interface Addresses {
