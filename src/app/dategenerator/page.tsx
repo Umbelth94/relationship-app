@@ -16,7 +16,7 @@ export interface DateFormData {
 
 export interface DateActivity {
   name: string;
-  date: string;
+  calendardate: string;
   startTime: string;
   endTime: string;
   location: string;

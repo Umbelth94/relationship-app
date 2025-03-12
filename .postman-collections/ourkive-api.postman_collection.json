@@ -1,0 +1,54 @@
+{
+  "info": {
+    "_postman_id": "e926176c-ff12-4e74-b9fc-a88075e8253b",
+    "name": "ourkive-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12399287"
+  },
+  "item": [
+    {
+      "name": "user",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "appSession={{cookie}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{domain}}/api/protected/user",
+          "host": ["{{domain}}"],
+          "path": ["api", "protected", "user"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "generate-date",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"familiarity\": \"3\",\r\n    \"private\": true,\r\n    \"location\": \"Twin Lakes, WI\",\r\n    \"budget\": \"<=$25\",\r\n    \"tags\": [\r\n        \"Baseball\"\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{domain}}/api/protected/generate-date",
+          "host": ["{{domain}}"],
+          "path": ["api", "protected", "generate-date"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
