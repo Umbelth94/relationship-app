@@ -1,3 +1,6 @@
+//Implement update functionality for upvoting and downvoting activities that are already saved into database
+//Implement updating timeframe (so user can change what time the activity is))
+
 import client from "@/mongodb/mongodb";
 import { DateActivity } from "../../../dategenerator/page";
 import { NextResponse } from "next/server";
