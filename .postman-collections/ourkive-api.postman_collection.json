@@ -1,0 +1,192 @@
+{
+  "info": {
+    "_postman_id": "e926176c-ff12-4e74-b9fc-a88075e8253b",
+    "name": "ourkive-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12399287"
+  },
+  "item": [
+    {
+      "name": "activities",
+      "item": [
+        {
+          "name": "activities",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "appSession={{cookie}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{domain}}/api/protected/activities?Cookie=appSession={{cookie}}",
+              "host": ["{{domain}}"],
+              "path": ["api", "protected", "activities"],
+              "query": [
+                {
+                  "key": "Cookie",
+                  "value": "appSession={{cookie}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "activities",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "appSession={{cookie}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"activities\": [\r\n            {\r\n                \"name\": \"Picnic at Elizabeth Lake\",\r\n                \"startDateTime\": \"2023-10-15T14:00:00\",\r\n                \"endDateTime\": \"2023-10-15T16:00:00\",\r\n                \"location\": \"Elizabeth Lake, Twin Lakes, WI\",\r\n                \"description\": \"Enjoy a quiet picnic by the lake with a homemade lunch, taking in the serene views and peaceful atmosphere.\",\r\n                \"estimatedCost\": \"$10 for ingredients\"\r\n            },\r\n            {\r\n                \"name\": \"Dance Practice at Home\",\r\n                \"startDateTime\": \"2023-10-15T17:00:00\",\r\n                \"endDateTime\": \"2023-10-15T18:00:00\",\r\n                \"location\": \"Your home, Twin Lakes, WI\",\r\n                \"description\": \"Learn a new dance routine together at home using online tutorials. It's a fun way to bond and try something new.\",\r\n                \"estimatedCost\": \"Free\"\r\n            },\r\n            {\r\n                \"name\": \"Stargazing at Lance Park\",\r\n                \"startDateTime\": \"2023-10-15T20:00:00\",\r\n                \"endDateTime\": \"2023-10-15T21:30:00\",\r\n                \"location\": \"Lance Park, Twin Lakes, WI\",\r\n                \"description\": \"Wrap up the night by stargazing at the park. Bring a blanket and enjoy the peaceful evening together.\",\r\n                \"estimatedCost\": \"$5 for snacks\"\r\n            }\r\n        ]\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{domain}}/api/protected/activities",
+              "host": ["{{domain}}"],
+              "path": ["api", "protected", "activities"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "dates",
+      "item": [
+        {
+          "name": "dates",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "appSession={{cookie}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"activityIds\": [\r\n        \"67d19b38486aee8fa1857f19\",\r\n        \"67d19b38486aee8fa1857f1a\"\r\n    ]//,\r\n    //\"updateDateId\": \"67d1b1c15857336ad5d3d78c\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{domain}}/api/protected/dates",
+              "host": ["{{domain}}"],
+              "path": ["api", "protected", "dates"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "dates",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "appSession={{cookie}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{domain}}/api/protected/dates",
+              "host": ["{{domain}}"],
+              "path": ["api", "protected", "dates"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "user",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "appSession={{cookie}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{domain}}/api/protected/user",
+              "host": ["{{domain}}"],
+              "path": ["api", "protected", "user"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "generate-date",
+      "item": [
+        {
+          "name": "generate-date",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "appSession={{cookie}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"familiarity\": \"3\",\r\n    \"private\": true,\r\n    \"location\": \"Twin Lakes, WI\",\r\n    \"budget\": \"<=$25\",\r\n    \"tags\": [\r\n        \"Dancing\", \"Eating\"\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{domain}}/api/protected/generate-date",
+              "host": ["{{domain}}"],
+              "path": ["api", "protected", "generate-date"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

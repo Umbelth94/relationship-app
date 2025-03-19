@@ -38,3 +38,17 @@ npm run build
 
 - [Figma](https://www.figma.com/design/Pj2683c0Id1wbZPqnIdDAA/Untitled?node-id=0-1&t=UtgOYFgdR6DVzicu-0)
 - [Todo/Design](https://lucid.app/lucidspark/67f2949b-a5ec-42f5-8105-31bf6368f86a/edit?viewport_loc=-2036%2C-3606%2C6513%2C3320%2C0_0&invitationId=inv_aaa447ef-a751-4b4c-b53c-0226a5d445c5)
+
+# Postman Testing
+
+- drag .postman-collections/ourkive-api.postman_collection.json into postman in a new workspace.
+- create a new environment with the following variables
+  ![postman env](./.readme-images/postman-env.png)
+- launch the website for local development
+
+```bash
+npm run dev
+```
+
+- login with any user account and copy the "Value" of your appSession cookie. Paste your cookie into the initial and current value for the cookie in the postman environment.
+  ![postman env](./.readme-images/cookie.png)

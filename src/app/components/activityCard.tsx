@@ -29,8 +29,8 @@ export default function ActivityCard({
         <p>{activity.description}</p>
         <p>{activity.location}</p>
         <p>{activity.estimatedCost}</p>
-        <p>{activity.startTime}</p>
-        <p>{activity.endTime}</p>
+        <p>{activity.startDateTime.toDateString()}</p>
+        <p>{activity.endDateTime.toDateString()}</p>
       </div>
       <div className="flex flex-row gap-2">
         <div>

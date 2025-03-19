@@ -13,13 +13,12 @@ const responseFormat = `
     "generatedDate": {
         "activities": [
             {
-                "name": "",
-                "date": "",
-                "startTime": "",
-                "endTime": "",
-                "location": "",
-                "description": ""
-                "estimatedCost":"",
+              "name": string,
+              "startDateTime": Date,
+              "endDateTime": Date,
+              "location": string,
+              "description": string,
+              "estimatedCost": string,
             }
         ]
     }
