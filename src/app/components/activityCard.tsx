@@ -19,9 +19,19 @@ export default function ActivityCard({
   activity,
   index,
 }: ActivityCardProps) {
+  const handleDownvote = () => {
+    setGeneratedDate((date) => {
+      if (!date) return date;
+      const updatedActivities = date.activities.filter((_, i) => i !== index);
+      // If updatedActivities is empty (no activities left), set the generatedDate to undefined
+      return updatedActivities.length > 0
+        ? { activities: updatedActivities }
+        : undefined;
+    });
+  };
   return (
     <div
-      key={activity.name}
+      key={activity._id}
       className=" flex relative flex-row justify-between border p-5 m-2 border-black/50"
     >
       <div>
@@ -29,30 +39,23 @@ export default function ActivityCard({
         <p>{activity.description}</p>
         <p>{activity.location}</p>
         <p>{activity.estimatedCost}</p>
-        <p>{activity.startDateTime.toDateString()}</p>
-        <p>{activity.endDateTime.toDateString()}</p>
+        <p>
+          {activity.startDateTime instanceof Date
+            ? activity.startDateTime.toDateString()
+            : "Invalid Date"}
+        </p>
+        <p>
+          {activity.endDateTime instanceof Date
+            ? activity.endDateTime.toDateString()
+            : "Invalid Date"}
+        </p>
       </div>
       <div className="flex flex-row gap-2">
         <div>
           <ThumbsUp selected={false}></ThumbsUp>
         </div>
         <div>
-          <ThumbsDown
-            selected={false}
-            onClick={() => {
-              //Remove activity from the list
-              setGeneratedDate((date) => {
-                if (!date) return date;
-                const updatedActivities = date.activities.filter(
-                  (_, i) => i !== index,
-                );
-                //If updatedActivities is empty (no activities left) then set the generatedDate to undefined which should close the modal
-                return updatedActivities.length > 0
-                  ? { activities: updatedActivities }
-                  : undefined;
-              });
-            }}
-          ></ThumbsDown>
+          <ThumbsDown selected={false} onClick={handleDownvote}></ThumbsDown>
         </div>
       </div>
     </div>

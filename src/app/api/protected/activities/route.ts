@@ -38,7 +38,7 @@ const insertActivities = async (
         description,
         estimatedCost,
       }) => ({
-        userId: userProfile._id,
+        userId: userProfile._id, //Associate activity with the user
         name,
         startDateTime,
         endDateTime,
@@ -48,7 +48,7 @@ const insertActivities = async (
         rank: 0, // -1 disliked, 0 neutral, 1 liked
       }),
     ),
-    { session },
+    { session }, // Ensure operation is part of the transaction
   );
 };
 
@@ -62,18 +62,18 @@ const updateUserProfileActivities = async (
     .collection<DatabaseUserProfile>("profiles");
 
   return profileCollection.updateOne(
-    { _id: userProfile._id },
-    { $push: { activityIds: { $each: activityIds } } },
-    { session },
+    { _id: userProfile._id }, // Find user by ID
+    { $push: { activityIds: { $each: activityIds } } }, // Append new activity IDs
+    { session }, // Ensure operation is part of the transaction
   );
 };
 
 const saveActivitiesToMongo = async (
   userProfile: DatabaseUserProfile,
   activities: DateActivity[],
-): Promise<boolean> => {
+): Promise<ObjectId[] | null> => {
   const session = client.startSession();
-  let success = false;
+  let insertedIds: ObjectId[] | null = null;
   try {
     await session.withTransaction(async () => {
       const insertResult = await insertActivities(
@@ -81,23 +81,26 @@ const saveActivitiesToMongo = async (
         activities,
         session,
       );
-      const insertedIds = Object.values(insertResult.insertedIds) as ObjectId[];
+      insertedIds = Object.values(insertResult.insertedIds) as ObjectId[];
       const updateResult = await updateUserProfileActivities(
         insertedIds,
         userProfile,
         session,
       );
 
-      success =
-        insertResult.insertedCount === activities.length &&
-        updateResult.modifiedCount === 1;
+      // Ensure all activities were inserted and profile was updated
+      return insertResult.insertedCount === activities.length &&
+        updateResult.modifiedCount === 1
+        ? insertedIds
+        : null;
     });
   } catch (err) {
     console.error("saveActivitiesToMongo failed:", err);
+    insertedIds = null;
   } finally {
     await session.endSession();
   }
-  return success;
+  return insertedIds; // Return the array of inserted activity IDs or null if failure
 };
 
 export const POST = withUserProfile(
@@ -108,9 +111,31 @@ export const POST = withUserProfile(
     }
 
     const saved = await saveActivitiesToMongo(userProfile, activities);
-    return saved
-      ? new NextResponse("", { status: 201 })
-      : new NextResponse("Error saving activities", { status: 500 });
+
+    if (saved) {
+      return new NextResponse(
+        JSON.stringify({
+          message: "Activities saved successfully",
+          activityIds: saved,
+        }),
+        {
+          status: 201,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+    } else {
+      return new NextResponse(
+        JSON.stringify({ error: "Error saving activities" }),
+        {
+          status: 500,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+    }
   },
 );
 

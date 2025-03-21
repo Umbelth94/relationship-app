@@ -5,6 +5,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { UserProfileContext } from "../provider/userProfileProvider";
 import { useContext, useEffect, useState } from "react";
 import DateModal from "../components/dateModal";
+import { UserProfile } from "../models/UserProfile";
+import { ObjectId } from "mongodb";
 
 export interface DateFormData {
   familiarity: number;
@@ -15,6 +17,7 @@ export interface DateFormData {
 }
 
 export interface DateActivity {
+  _id?: string;
   name: string;
   startDateTime: Date;
   endDateTime: Date;
@@ -75,22 +78,74 @@ const DateGenerator: NextPage = withPageAuthRequired(
       setValue,
     } = useForm<DateFormData>();
 
-    const onSubmit: SubmitHandler<DateFormData> = (dateFormData) => {
+    const onSubmit: SubmitHandler<DateFormData> = async (dateFormData) => {
       const submissionData = {
         ...dateFormData,
         tags,
       };
-      console.log(submissionData); // Does this look correct when the form is submitted
-      fetch(`${window.location.origin}/api/protected/generate-date/`, {
-        method: "Post",
-        body: JSON.stringify(submissionData),
-      }).then((resp) => {
-        resp.json().then((data) => {
-          console.log(data.generatedDate);
-          setGeneratedDate(data.generatedDate);
-          setGeneratedDateModalOpen(true);
-        });
-      });
+
+      try {
+        const resp = await fetch(
+          `${window.location.origin}/api/protected/generate-date`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(submissionData),
+          },
+        );
+
+        if (!resp.ok) {
+          console.error(
+            "Failed to fetch generated date I think:",
+            resp.statusText,
+          );
+          return;
+        }
+
+        const data = await resp.json();
+        console.log(data.generatedDate);
+
+        if (!data.generatedDate) return;
+
+        if (userProfile) {
+          const saveResp = await fetch(
+            `${window.location.origin}/api/protected/activities`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                activities: data.generatedDate.activities,
+              }),
+            },
+          );
+
+          const saveData = await saveResp.json();
+          console.log(saveData);
+
+          if (saveData) {
+            console.log("Activities saved successfully!");
+            setGeneratedDate({
+              activities: data.generatedDate.activities.map(
+                (activity: DateActivity, index: number) => ({
+                  ...activity,
+                  _id: saveData.activityIds[index], // Assuming this is returned in the response
+                  key: activity._id || `${activity.name}-${index}`,
+                }),
+              ),
+            });
+          } else {
+            console.error("Error saving activities");
+          }
+        }
+
+        setGeneratedDateModalOpen(true);
+      } catch (err) {
+        console.error("Error fetching generated date:", err);
+      }
     };
     return (
       <main className="flex flex-col items-center h-screen w-screen bg-secondary pt-[3em]">
@@ -206,3 +261,6 @@ const DateGenerator: NextPage = withPageAuthRequired(
 );
 
 export default DateGenerator;
+function saveActivitiesToMongo(userProfile: UserProfile, activities: any) {
+  throw new Error("Function not implemented.");
+}
