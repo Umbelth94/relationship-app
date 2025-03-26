@@ -73,6 +73,15 @@
           "request": {
             "method": "PATCH",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"activities\": [\r\n        {\r\n            \"_id\": \"67d190c8874eff7e87a6edd4\",\r\n            \"rank\": 1\r\n        },\r\n        {\r\n            \"_id\": \"67d190c8874eff7e87a6edd5\",\r\n            \"rank\": 1\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{domain}}/api/protected/activities",
               "host": ["{{domain}}"],
