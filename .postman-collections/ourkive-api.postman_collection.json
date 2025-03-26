@@ -67,6 +67,19 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "activities",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{domain}}/api/protected/activities",
+              "host": ["{{domain}}"],
+              "path": ["api", "protected", "activities"]
+            }
+          },
+          "response": []
         }
       ]
     },

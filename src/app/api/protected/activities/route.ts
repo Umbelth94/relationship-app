@@ -68,7 +68,7 @@ const updateUserProfileActivities = async (
   );
 };
 
-const saveActivitiesToMongo = async (
+export const saveActivitiesToMongo = async (
   userProfile: DatabaseUserProfile,
   activities: DateActivity[],
 ): Promise<ObjectId[] | null> => {
@@ -139,6 +139,15 @@ export const POST = withUserProfile(
   },
 );
 
+export async function getActivities(
+  objectIds: ObjectId[],
+): Promise<UserDateActivity[]> {
+  const activitiesCollection = client
+    .db("users")
+    .collection<UserDateActivity>("activities");
+  return await activitiesCollection.find({ _id: { $in: objectIds } }).toArray();
+}
+
 export const GET = withUserProfile(
   async (userProfile: DatabaseUserProfile, req: Request) => {
     // If there are no activityIds, return an empty activities array.
@@ -147,13 +156,65 @@ export const GET = withUserProfile(
     }
 
     // Retrieve activities where _id is in the user's activityIds array.
-    const activitiesCollection = client
-      .db("users")
-      .collection<UserDateActivity>("activities");
-    const activities = await activitiesCollection
-      .find({ _id: { $in: userProfile.activityIds } })
-      .toArray();
+    const activities = await getActivities(userProfile.activityIds);
 
     return NextResponse.json({ activities });
+  },
+);
+
+export const PATCH = withUserProfile(
+  async (userProfile: DatabaseUserProfile, req: Request) => {
+    try {
+      // Expecting an array of objects: { _id: "someId", rank: 1, ... }
+      const { activities } = await req.json();
+      if (
+        !activities ||
+        !Array.isArray(activities) ||
+        activities.length === 0
+      ) {
+        return new NextResponse("No activities provided", { status: 400 });
+      }
+
+      const activityCollection = client
+        .db("users")
+        .collection<UserDateActivity>("activities");
+
+      // create an array of bulk operations, each element of the array is an update for an activity
+      const bulkOps = activities.map((activity: any) => {
+        if (!activity._id) {
+          throw new Error("Each activity must include an _id.");
+        }
+
+        // Destructure _id and the rest of the fields to update.
+        const { _id, ...updateFields } = activity;
+
+        // Prevent any attempt to update the _id or userId.
+        delete updateFields._id;
+        delete updateFields.userId;
+
+        // Update the activity by _id and make sure the userProfile._id matches
+        return {
+          updateOne: {
+            filter: {
+              _id: new ObjectId(_id as string),
+              userId: userProfile._id,
+            },
+            update: { $set: updateFields },
+          },
+        };
+      });
+
+      if (bulkOps.length === 0) {
+        return new NextResponse("No valid update operations", { status: 400 });
+      }
+
+      // execute the bulk operations
+      const result = await activityCollection.bulkWrite(bulkOps);
+
+      return new NextResponse("", { status: 200 });
+    } catch (error: any) {
+      console.error("PATCH Activities error:", error);
+      return new NextResponse("", { status: 500 });
+    }
   },
 );
