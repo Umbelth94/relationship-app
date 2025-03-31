@@ -19,20 +19,41 @@ export default function ActivityCard({
   activity,
   index,
 }: ActivityCardProps) {
-  const handleDownvote = () => {
-    setGeneratedDate((date) => {
-      if (!date) return date;
-      const updatedActivities = date.activities.filter((_, i) => i !== index);
-      // If updatedActivities is empty (no activities left), set the generatedDate to undefined
-      return updatedActivities.length > 0
-        ? { activities: updatedActivities }
-        : undefined;
+  const handleLikeDislike = (liked: boolean) => {
+    // Should we update the state variable like this? And then later when the user presses
+    // a button like "Create Date", or "Regenerate Date" we update all the activities at once
+    // using a new PATCH endpoint?
+
+    // this will currently save the updated activity into the react state, but it does not call the API
+    // to update the database
+    setGeneratedDate((prevDate) => {
+      const activities = prevDate?.activities.map((prevActivity) => {
+        let rank = prevActivity.rank;
+        if (prevActivity._id == activity._id) {
+          // if user liked an already liked activity set it to neutrual
+          // or if user disliked an already disliked activity set it to neutrual
+          if ((rank == 1 && liked) || (rank == -1 && !liked)) {
+            rank = 0;
+          } else {
+            rank = liked ? 1 : -1;
+          }
+        }
+        return {
+          ...prevActivity,
+          rank,
+        };
+      }) as DateActivity[];
+
+      return {
+        activities,
+      };
     });
   };
+
   return (
     <div
       key={activity._id}
-      className=" flex relative flex-row justify-between border p-5 m-2 border-black/50"
+      className=" flex relative flex-row justify-between border p-5 m-2 border-black/50 text-light-font-color-1 dark:text-dark-font-color-1"
     >
       <div>
         <p>{activity.name}</p>
@@ -41,21 +62,34 @@ export default function ActivityCard({
         <p>{activity.estimatedCost}</p>
         <p>
           {activity.startDateTime instanceof Date
-            ? activity.startDateTime.toDateString()
+            ? activity.startDateTime.toLocaleDateString()
             : "Invalid Date"}
         </p>
         <p>
-          {activity.endDateTime instanceof Date
-            ? activity.endDateTime.toDateString()
-            : "Invalid Date"}
+          {" "}
+          {`${
+            activity.startDateTime instanceof Date
+              ? activity.startDateTime.toLocaleTimeString()
+              : "Invalid Date"
+          } - ${
+            activity.endDateTime instanceof Date
+              ? activity.endDateTime.toLocaleTimeString()
+              : "Invalid Date"
+          }`}
         </p>
       </div>
       <div className="flex flex-row gap-2">
         <div>
-          <ThumbsUp selected={false}></ThumbsUp>
+          <ThumbsUp
+            selected={activity.rank == 1}
+            onClick={() => handleLikeDislike(true)}
+          ></ThumbsUp>
         </div>
         <div>
-          <ThumbsDown selected={false} onClick={handleDownvote}></ThumbsDown>
+          <ThumbsDown
+            selected={activity.rank == -1}
+            onClick={() => handleLikeDislike(false)}
+          ></ThumbsDown>
         </div>
       </div>
     </div>

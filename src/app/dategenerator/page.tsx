@@ -24,6 +24,7 @@ export interface DateActivity {
   location: string;
   description: string;
   estimatedCost: string;
+  rank: number;
 }
 
 export interface GeneratedDate {
@@ -104,42 +105,23 @@ const DateGenerator: NextPage = withPageAuthRequired(
           return;
         }
 
-        const data = await resp.json();
-        console.log(data.generatedDate);
+        const generatedDate = (await resp.json()) as GeneratedDate;
+        generatedDate.activities = generatedDate.activities.map(
+          (activity: DateActivity) => {
+            return {
+              ...activity,
+              startDateTime: new Date(activity.startDateTime),
+              endDateTime: new Date(activity.endDateTime),
+            };
+          },
+        );
+        console.log(generatedDate);
 
-        if (!data.generatedDate) return;
-
-        if (userProfile) {
-          const saveResp = await fetch(
-            `${window.location.origin}/api/protected/activities`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                activities: data.generatedDate.activities,
-              }),
-            },
-          );
-
-          const saveData = await saveResp.json();
-          console.log(saveData);
-
-          if (saveData) {
-            console.log("Activities saved successfully!");
-            setGeneratedDate({
-              activities: data.generatedDate.activities.map(
-                (activity: DateActivity, index: number) => ({
-                  ...activity,
-                  _id: saveData.activityIds[index], // Assuming this is returned in the response
-                  key: activity._id || `${activity.name}-${index}`,
-                }),
-              ),
-            });
-          } else {
-            console.error("Error saving activities");
-          }
+        if (generatedDate) {
+          console.log("Activities saved successfully!");
+          setGeneratedDate(generatedDate);
+        } else {
+          console.error("Error saving activities");
         }
 
         setGeneratedDateModalOpen(true);
