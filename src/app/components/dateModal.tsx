@@ -23,9 +23,30 @@ export default function DateModal({
 }: DateModalProps) {
   if (!generatedDate) return null;
 
-  function saveDateToMongo() {
-    //Patch the activities
+  async function saveDateToMongo() {
     //Save the date
+    try {
+      const resp = await fetch(
+        `${window.location.origin}/api/protected/dates`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(generatedDate),
+        },
+      );
+
+      if (!resp.ok) {
+        console.error("Failed to post date", resp.statusText);
+      }
+
+      setIsOpen(false);
+      console.log("Very nice, big success");
+      alert("Date saved successfully!");
+    } catch (err) {
+      console.error("Error posting generated date", err);
+    }
   }
 
   return (
@@ -61,7 +82,7 @@ export default function DateModal({
             <div
               className="p-5 max-w-[50%] mx-auto text-center bg-primary cursor-pointer rounded-md"
               onClick={() => {
-                console.log("save date");
+                saveDateToMongo();
               }}
             >
               <p className="text-center">Save Date</p>

@@ -200,16 +200,13 @@ export async function patchActivities(
       throw new Error("Each activity must include an _id.");
     }
 
-    // Destructure _id and the rest of the fields to update.
-    const { _id, ...updateFields } = activity;
-
     //Define allowed keys for updating
     const ALLOWED_UPDATE_FIELDS = ["rank"] as const;
     type AllowedUpdateField = (typeof ALLOWED_UPDATE_FIELDS)[number];
 
     //Filter the update object so that it only includes valid fields
     const sanitizedUpdateFields = Object.fromEntries(
-      Object.entries(updateFields).filter(([key]) =>
+      Object.entries(activity).filter(([key]) =>
         ALLOWED_UPDATE_FIELDS.includes(key as AllowedUpdateField),
       ),
     );
@@ -218,7 +215,7 @@ export async function patchActivities(
     return {
       updateOne: {
         filter: {
-          _id: new ObjectId(_id as string),
+          _id: new ObjectId(activity._id as string),
           userId: userProfile._id,
         },
         update: { $set: sanitizedUpdateFields },

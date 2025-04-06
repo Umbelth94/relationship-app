@@ -57,7 +57,7 @@ export const POST = withUserProfile(
 
                 Use only real locations in the generated activities. Populate the response json object with activities to create a perfect date using the following groups of information:
                 The following are some ideas to use, but the system should come up with ideas of it's own as well ${dateFormData.tags}.
-                The location of the date should be in or near ${location}.
+                The location of the date should be in or near ${location}. Ensure all locations exist and have valid addresses.
                 The amount of money they want to spend is ${dateFormData.budget}.
                 The date should be ${dateFormData.private ? "private" : "public"}.
                 
