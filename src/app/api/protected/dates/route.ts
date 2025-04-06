@@ -3,6 +3,8 @@ import { ObjectId } from "mongodb";
 import withUserProfile from "@/app/api-helpers/withUserProfile";
 import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import { NextResponse } from "next/server";
+import { DateActivity } from "@/app/dategenerator/page";
+import { patchActivities } from "../activities/route";
 
 interface UserDate {
   userId: string;
@@ -10,7 +12,7 @@ interface UserDate {
 }
 
 export async function updateOrCreateUserDate(
-  activityIds: string[],
+  activities: DateActivity[],
   userProfile: DatabaseUserProfile,
   updateDateId?: string,
 ): Promise<boolean> {
@@ -19,8 +21,8 @@ export async function updateOrCreateUserDate(
     .db("users")
     .collection<DatabaseUserProfile>("profiles");
 
-  const activityObjectIds = activityIds.map((activityId) => {
-    return new ObjectId(activityId);
+  const activityObjectIds = activities.map((activity) => {
+    return new ObjectId(activity._id);
   });
 
   const updateDateObjectId = new ObjectId(updateDateId);
@@ -58,32 +60,39 @@ export async function updateOrCreateUserDate(
 // Valid if all activity ids are in the userProfile
 function isValidActivityIds(
   userProfile: DatabaseUserProfile,
-  activityIds: string[],
+  activities: DateActivity[],
 ): boolean {
   const validIdSet = new Set(
     userProfile.activityIds?.map((id) => id.toHexString()),
   );
-  return activityIds.every((id) => validIdSet.has(id));
+  return activities.every((activity) => validIdSet.has(activity._id ?? ""));
 }
 
 interface PostBody {
-  activityIds: string[];
+  activities: DateActivity[];
   updateDateId?: string;
 }
 
 export const POST = withUserProfile(
   async (userProfile: DatabaseUserProfile, req: Request) => {
-    const { activityIds, updateDateId }: PostBody = await req.json();
+    const { activities, updateDateId }: PostBody = await req.json();
 
-    if (!activityIds || activityIds.length === 0) {
+    if (!activities || activities.length === 0) {
       return new NextResponse("No activities provided", { status: 400 });
     }
 
-    if (!isValidActivityIds(userProfile, activityIds)) {
+    if (!isValidActivityIds(userProfile, activities)) {
       return new NextResponse("Activity Ids are not valid", { status: 400 });
     }
 
-    if (await updateOrCreateUserDate(activityIds, userProfile, updateDateId)) {
+    try {
+      await patchActivities(activities, userProfile);
+    } catch (err: any) {
+      console.log(err);
+      return new NextResponse("Failed to update activities", { status: 500 });
+    }
+
+    if (await updateOrCreateUserDate(activities, userProfile, updateDateId)) {
       return new NextResponse("", { status: 201 });
     } else {
       return new NextResponse("Failed to save date", { status: 500 });

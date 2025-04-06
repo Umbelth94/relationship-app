@@ -23,6 +23,11 @@ export default function DateModal({
 }: DateModalProps) {
   if (!generatedDate) return null;
 
+  function saveDateToMongo() {
+    //Patch the activities
+    //Save the date
+  }
+
   return (
     <>
       {isOpen && (
@@ -53,14 +58,14 @@ export default function DateModal({
                 ></ActivityCard>
               );
             })}
-          </div>
-          <div className="p-5 bg-primary cursor-pointer rounded-md">
-            <input
-              type="button"
+            <div
+              className="p-5 max-w-[50%] mx-auto text-center bg-primary cursor-pointer rounded-md"
               onClick={() => {
                 console.log("save date");
               }}
-            />
+            >
+              <p className="text-center">Save Date</p>
+            </div>
           </div>
         </div>
       )}

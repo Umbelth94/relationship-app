@@ -162,6 +162,7 @@ export const GET = withUserProfile(
   },
 );
 
+//Updates the rank of activities
 export const PATCH = withUserProfile(
   async (userProfile: DatabaseUserProfile, req: Request) => {
     try {
@@ -175,41 +176,7 @@ export const PATCH = withUserProfile(
         return new NextResponse("No activities provided", { status: 400 });
       }
 
-      const activityCollection = client
-        .db("users")
-        .collection<UserDateActivity>("activities");
-
-      // create an array of bulk operations, each element of the array is an update for an activity
-      const bulkOps = activities.map((activity: any) => {
-        if (!activity._id) {
-          throw new Error("Each activity must include an _id.");
-        }
-
-        // Destructure _id and the rest of the fields to update.
-        const { _id, ...updateFields } = activity;
-
-        // Prevent any attempt to update the _id or userId.
-        delete updateFields._id;
-        delete updateFields.userId;
-
-        // Update the activity by _id and make sure the userProfile._id matches
-        return {
-          updateOne: {
-            filter: {
-              _id: new ObjectId(_id as string),
-              userId: userProfile._id,
-            },
-            update: { $set: updateFields },
-          },
-        };
-      });
-
-      if (bulkOps.length === 0) {
-        return new NextResponse("No valid update operations", { status: 400 });
-      }
-
-      // execute the bulk operations
-      const result = await activityCollection.bulkWrite(bulkOps);
+      await patchActivities(activities, userProfile);
 
       return new NextResponse("", { status: 200 });
     } catch (error: any) {
@@ -218,3 +185,47 @@ export const PATCH = withUserProfile(
     }
   },
 );
+
+export async function patchActivities(
+  activities: DateActivity[],
+  userProfile: DatabaseUserProfile,
+) {
+  const activityCollection = client
+    .db("users")
+    .collection<UserDateActivity>("activities");
+
+  // create an array of bulk operations, each element of the array is an update for an activity
+  const bulkOps = activities.map((activity: any) => {
+    if (!activity._id) {
+      throw new Error("Each activity must include an _id.");
+    }
+
+    // Destructure _id and the rest of the fields to update.
+    const { _id, ...updateFields } = activity;
+
+    //Define allowed keys for updating
+    const ALLOWED_UPDATE_FIELDS = ["rank"] as const;
+    type AllowedUpdateField = (typeof ALLOWED_UPDATE_FIELDS)[number];
+
+    //Filter the update object so that it only includes valid fields
+    const sanitizedUpdateFields = Object.fromEntries(
+      Object.entries(updateFields).filter(([key]) =>
+        ALLOWED_UPDATE_FIELDS.includes(key as AllowedUpdateField),
+      ),
+    );
+
+    // Update the activity by _id and make sure the userProfile._id matches
+    return {
+      updateOne: {
+        filter: {
+          _id: new ObjectId(_id as string),
+          userId: userProfile._id,
+        },
+        update: { $set: sanitizedUpdateFields },
+      },
+    };
+  });
+
+  // execute the bulk operations
+  const result = await activityCollection.bulkWrite(bulkOps);
+}
