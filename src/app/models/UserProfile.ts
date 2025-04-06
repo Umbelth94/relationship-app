@@ -1,8 +1,11 @@
 import { UserProfileFields } from "../myaccount/page";
+import { ObjectId } from "mongodb";
 
 export interface DatabaseUserProfile extends UserProfile {
   _id: string;
 }
+
+type NewType = ObjectId;
 
 export interface UserProfile {
   firstName?: string;
@@ -13,6 +16,8 @@ export interface UserProfile {
   pronouns?: string;
   address?: Addresses;
   about?: About;
+  activityIds?: ObjectId[];
+  userDates?: ObjectId[];
 }
 
 interface Addresses {

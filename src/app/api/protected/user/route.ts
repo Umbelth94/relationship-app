@@ -12,7 +12,7 @@ export async function PUT(req: NextRequest) {
   const session = await getSession();
   const updatedProfile = await req.json();
   const collection = client.db("users").collection("profiles");
-  collection.findOneAndUpdate(
+  await collection.findOneAndUpdate(
     { _id: session?.user.sub },
     { $set: updatedProfile },
   );
@@ -22,7 +22,6 @@ export async function PUT(req: NextRequest) {
 //Search the database for a match using the Auth0 id from session and the _id in MongoDB.  If that user does not exist, it will create them and return it.
 export async function GET(req: NextRequest) {
   const session = await getSession();
-  console.log("User id = " + session?.user.sub);
   const collection = client
     .db("users")
     .collection<DatabaseUserProfile>("profiles");

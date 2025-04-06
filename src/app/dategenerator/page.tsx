@@ -5,6 +5,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { UserProfileContext } from "../provider/userProfileProvider";
 import { useContext, useEffect, useState } from "react";
 import DateModal from "../components/dateModal";
+import { UserProfile } from "../models/UserProfile";
+import { ObjectId } from "mongodb";
 
 export interface DateFormData {
   familiarity: number;
@@ -15,13 +17,14 @@ export interface DateFormData {
 }
 
 export interface DateActivity {
+  _id?: string;
   name: string;
-  date: string;
-  startTime: string;
-  endTime: string;
+  startDateTime: Date;
+  endDateTime: Date;
   location: string;
   description: string;
   estimatedCost: string;
+  rank: number;
 }
 
 export interface GeneratedDate {
@@ -76,22 +79,55 @@ const DateGenerator: NextPage = withPageAuthRequired(
       setValue,
     } = useForm<DateFormData>();
 
-    const onSubmit: SubmitHandler<DateFormData> = (dateFormData) => {
+    const onSubmit: SubmitHandler<DateFormData> = async (dateFormData) => {
       const submissionData = {
         ...dateFormData,
         tags,
       };
-      console.log(submissionData); // Does this look correct when the form is submitted
-      fetch(`${window.location.origin}/api/protected/generate-date/`, {
-        method: "Post",
-        body: JSON.stringify(submissionData),
-      }).then((resp) => {
-        resp.json().then((data) => {
-          console.log(data.generatedDate);
-          setGeneratedDate(data.generatedDate);
-          setGeneratedDateModalOpen(true);
-        });
-      });
+
+      try {
+        const resp = await fetch(
+          `${window.location.origin}/api/protected/generate-date`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(submissionData),
+          },
+        );
+
+        if (!resp.ok) {
+          console.error(
+            "Failed to fetch generated date I think:",
+            resp.statusText,
+          );
+          return;
+        }
+
+        const generatedDate = (await resp.json()) as GeneratedDate;
+        generatedDate.activities = generatedDate.activities.map(
+          (activity: DateActivity) => {
+            return {
+              ...activity,
+              startDateTime: new Date(activity.startDateTime),
+              endDateTime: new Date(activity.endDateTime),
+            };
+          },
+        );
+        console.log(generatedDate);
+
+        if (generatedDate) {
+          console.log("Activities saved successfully!");
+          setGeneratedDate(generatedDate);
+        } else {
+          console.error("Error saving activities");
+        }
+
+        setGeneratedDateModalOpen(true);
+      } catch (err) {
+        console.error("Error fetching generated date:", err);
+      }
     };
     return (
       <main className="flex flex-col items-center h-screen w-screen bg-secondary pt-[3em]">
@@ -207,3 +243,6 @@ const DateGenerator: NextPage = withPageAuthRequired(
 );
 
 export default DateGenerator;
+function saveActivitiesToMongo(userProfile: UserProfile, activities: any) {
+  throw new Error("Function not implemented.");
+}
