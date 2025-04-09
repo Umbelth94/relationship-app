@@ -11,24 +11,25 @@ import {
   Dispatch,
 } from "react";
 import { UserProfile } from "../models/UserProfile";
-import { UserDate } from "../api/protected/dates/route";
+import { UserDateInfo } from "../api/protected/dates/route";
 
 interface UserDataContextProps {
-  userDates?: UserDate[];
-  setUserDates?: Dispatch<SetStateAction<UserDate[] | undefined>>;
+  userDates?: UserDateInfo[];
+  setUserDates?: Dispatch<SetStateAction<UserDateInfo[] | undefined>>;
   userProfile?: UserProfile;
   setUserProfile?: Dispatch<SetStateAction<UserProfile | undefined>>;
+  refetchUserDates?: () => void;
 }
 
-export const UserProfileContext = createContext<UserDataContextProps>({});
+export const UserDataContext = createContext<UserDataContextProps>({});
 
-export default function UserProfileProvider({
+export default function UserDataProvider({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const [userProfile, setUserProfile] = useState<UserProfile>();
-  const [userDates, setUserDates] = useState<UserDate[]>();
+  const [userDates, setUserDates] = useState<UserDateInfo[]>();
 
   // Run a fetch request to grab the user's profile information
   useEffect(() => {
@@ -51,30 +52,31 @@ export default function UserProfileProvider({
     }
   }, [userProfile]);
 
-  useEffect(() => {
-    console.log("userDates provider useEffect initialized");
-    if (typeof window !== "undefined") {
-      console.log("fetching date data");
-      fetch(`${window.location.origin}/api/protected/dates`).then((dates) => {
-        if (dates.status === 200) {
-          dates.json().then((dateData) => {
-            if (JSON.stringify(dateData) !== JSON.stringify(userDates)) {
-              setUserDates(dateData);
-            } else {
-              return;
-            }
-          });
-        }
+  const fetchUserDates = () => {
+    fetch(`${window.location.origin}/api/protected/dates`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUserDates(data.userDates);
       });
+  };
+  useEffect(() => {
+    if (userProfile) {
+      fetchUserDates();
     }
-  }, [userDates]);
+  }, [userProfile]);
 
   return (
     //Wrap the child elements inside of the provider
-    <UserProfileContext.Provider
-      value={{ userProfile, setUserProfile, userDates, setUserDates }}
+    <UserDataContext.Provider
+      value={{
+        userProfile,
+        setUserProfile,
+        userDates,
+        setUserDates,
+        refetchUserDates: fetchUserDates,
+      }}
     >
       {children}
-    </UserProfileContext.Provider>
+    </UserDataContext.Provider>
   );
 }

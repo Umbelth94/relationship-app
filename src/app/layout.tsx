@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import Navbar from "./components/navbar";
-import UserProfileProvider from "./provider/userProfileProvider";
+import UserDataProvider from "./provider/userDataProvider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <title>Ourkive</title>
       {/* Wrap the application in our custom user provider */}
-      <UserProfileProvider>
+      <UserDataProvider>
         {/* Wrap the application in the Auth0 provider for authentication  */}
         <UserProvider>
           <body>
@@ -29,7 +29,7 @@ export default function RootLayout({
             {children}
           </body>
         </UserProvider>
-      </UserProfileProvider>
+      </UserDataProvider>
     </html>
   );
 }

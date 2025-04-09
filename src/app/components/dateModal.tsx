@@ -3,10 +3,10 @@
 //TODO: Save entire date button
 
 "use client";
-
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 import { DateActivity, GeneratedDate } from "../dategenerator/page";
 import ActivityCard from "./activityCard";
+import { UserDataContext } from "../provider/userDataProvider";
 
 interface DateModalProps {
   generatedDate: GeneratedDate;
@@ -22,6 +22,7 @@ export default function DateModal({
   setGeneratedDate,
 }: DateModalProps) {
   if (!generatedDate) return null;
+  const { refetchUserDates } = useContext(UserDataContext);
 
   async function saveDateToMongo() {
     //Save the date
@@ -44,6 +45,7 @@ export default function DateModal({
       setIsOpen(false);
       console.log("Very nice, big success");
       alert("Date saved successfully!");
+      refetchUserDates?.();
     } catch (err) {
       console.error("Error posting generated date", err);
     }
@@ -92,4 +94,7 @@ export default function DateModal({
       )}
     </>
   );
+}
+function refetchUserDates() {
+  throw new Error("Function not implemented.");
 }

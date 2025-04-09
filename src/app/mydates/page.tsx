@@ -1,38 +1,27 @@
 "use client";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { NextPage } from "next";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { UserDate } from "../api/protected/dates/route";
+import { UserDataContext } from "../provider/userDataProvider";
 
 const MyDates: NextPage = withPageAuthRequired(
-  async () => {
-    // All dates state variable
-    const [savedDates, setSavedDates] = useState<UserDate | undefined>(
-      undefined,
-    );
-
-    // Get all dates
-    const resp = await fetch(`${window.location.origin}/api/protected/dates`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    //Set response data to savedDates state variable
-    if (resp.ok) {
-      resp.json().then((data) => {
-        setSavedDates(data);
-      });
-    }
-
+  () => {
+    const { userDates, setUserDates } = useContext(UserDataContext);
     // Create date cards
     return (
       <main>
         <div>
-          {
-            // Display a clickable "date" card for each date that will open a modal that provides more details
-          }
+          {userDates?.map((date, index) => {
+            return (
+              <>
+                <hr></hr>
+                {date.activities.map((activity, index) => {
+                  return <p>{activity.description}</p>;
+                })}
+              </>
+            );
+          })}
         </div>
       </main>
     );

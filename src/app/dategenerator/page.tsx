@@ -2,7 +2,7 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { NextPage } from "next";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { UserProfileContext } from "../provider/userProfileProvider";
+import { UserDataContext } from "../provider/userDataProvider";
 import { useContext, useEffect, useState } from "react";
 import DateModal from "../components/dateModal";
 import { UserProfile } from "../models/UserProfile";
@@ -33,7 +33,7 @@ export interface GeneratedDate {
 
 const DateGenerator: NextPage = withPageAuthRequired(
   () => {
-    const { userProfile, setUserProfile } = useContext(UserProfileContext);
+    const { userProfile, setUserProfile } = useContext(UserDataContext);
     const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState("");
     const [generatedDate, setGeneratedDate] = useState<

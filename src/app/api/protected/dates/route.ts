@@ -5,6 +5,7 @@ import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import { NextResponse } from "next/server";
 import { DateActivity } from "@/app/dategenerator/page";
 import { patchActivities } from "../activities/route";
+import { Activity } from "@/app/models/Activity";
 
 export interface UserDate {
   userId: string;
@@ -100,6 +101,12 @@ export const POST = withUserProfile(
   },
 );
 
+export interface UserDateInfo extends UserDate {
+  activities: DateActivity[];
+}
+interface GetUserDatesResponse {
+  userDates: UserDateInfo;
+}
 export const GET = withUserProfile(
   async (userProfile: DatabaseUserProfile, req: Request) => {
     // If there are no userDates, return an empty array.
