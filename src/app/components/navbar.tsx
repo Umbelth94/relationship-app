@@ -34,6 +34,15 @@ export default function Navbar() {
           Date Generator
         </TextLink>
       )}
+      {/*MyDates Link*/}
+      {user && (
+        <TextLink
+          className="text-on-primary"
+          onClick={() => router.push("/mydates")}
+        >
+          My Dates
+        </TextLink>
+      )}
       {/*Scrapbook Link*/}
       {user && (
         <TextLink

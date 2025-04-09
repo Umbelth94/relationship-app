@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import { DateActivity } from "@/app/dategenerator/page";
 import { patchActivities } from "../activities/route";
 
-interface UserDate {
+export interface UserDate {
   userId: string;
   activityIds: ObjectId[];
 }

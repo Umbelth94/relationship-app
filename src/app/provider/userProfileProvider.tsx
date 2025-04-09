@@ -11,9 +11,15 @@ import {
   Dispatch,
 } from "react";
 import { UserProfile } from "../models/UserProfile";
+import { UserDate } from "../api/protected/dates/route";
+
+interface UserData {
+  userProfile: UserProfile;
+  userDates: UserDate[];
+}
 
 interface UserProfileContextProps {
-  userProfile?: UserProfile;
+  userData?: UserData;
   setUserProfile?: Dispatch<SetStateAction<UserProfile | undefined>>;
 }
 

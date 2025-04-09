@@ -2,17 +2,17 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { NextPage } from "next";
 
-const MyDates: NextPage = withPageAuthRequired(
+const Default: NextPage = withPageAuthRequired(
   () => {
     return (
       <main>
         <div>
-          <p>Pengis</p>
+          <p>Default</p>
         </div>
       </main>
     );
   },
-  { returnTo: "/my-dates" },
+  { returnTo: "/default" },
 );
 
-export default MyDates;
+export default Default;
