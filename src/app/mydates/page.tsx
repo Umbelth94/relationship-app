@@ -2,7 +2,6 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { NextPage } from "next";
 import { useContext, useState } from "react";
-import { UserDate } from "../api/protected/dates/route";
 import { UserDataContext } from "../provider/userDataProvider";
 
 const MyDates: NextPage = withPageAuthRequired(
