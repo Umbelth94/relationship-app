@@ -13,7 +13,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { UserProfileContext } from "../provider/userProfileProvider";
 import {
   FieldErrors,
   SubmitHandler,
@@ -24,6 +23,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import Button from "component-nest/components/client/buttons/Button";
 import { isEqual } from "@/util/isEqual";
 import { trimInputFields } from "@/util/trimInputFields";
+import { UserDataContext } from "../provider/userDataProvider";
 
 export type UserProfileFields = {
   firstName: string;
@@ -51,7 +51,7 @@ export type UserProfileFields = {
 //Auth0 middleware that checks if the user is authenticated
 const MyAccount: NextPage = withPageAuthRequired(
   () => {
-    const { userProfile, setUserProfile } = useContext(UserProfileContext);
+    const { userProfile, setUserProfile } = useContext(UserDataContext);
     const [shouldSubmit, setShouldSubmit] = useState<boolean>(false);
 
     const {

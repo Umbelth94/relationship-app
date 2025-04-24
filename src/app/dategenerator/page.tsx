@@ -2,9 +2,9 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { NextPage } from "next";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { UserProfileContext } from "../provider/userProfileProvider";
+import { UserDataContext } from "../provider/userDataProvider";
 import { useContext, useEffect, useState } from "react";
-import DateModal from "../components/dateModal";
+import GeneratedDateModal from "../components/generatedDateModal";
 import { UserProfile } from "../models/UserProfile";
 import { ObjectId } from "mongodb";
 
@@ -33,7 +33,7 @@ export interface GeneratedDate {
 
 const DateGenerator: NextPage = withPageAuthRequired(
   () => {
-    const { userProfile, setUserProfile } = useContext(UserProfileContext);
+    const { userProfile, setUserProfile } = useContext(UserDataContext);
     const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState("");
     const [generatedDate, setGeneratedDate] = useState<
@@ -132,12 +132,12 @@ const DateGenerator: NextPage = withPageAuthRequired(
     return (
       <main className="flex flex-col items-center h-screen w-screen bg-secondary pt-[3em]">
         {generatedDate && (
-          <DateModal
+          <GeneratedDateModal
             generatedDate={generatedDate}
             setGeneratedDate={setGeneratedDate}
             isOpen={generatedDateModalOpen}
             setIsOpen={setGeneratedDateModalOpen}
-          ></DateModal>
+          ></GeneratedDateModal>
         )}
         <form
           className="flex flex-col gap-2 text-[#747474] bg-tertiary w-[60%] rounded-xl px-[2em] pb-[2em] pt-[1em] shadow-lg justify-self-center"

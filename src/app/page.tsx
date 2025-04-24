@@ -3,12 +3,10 @@
 import Button from "component-nest/components/client/buttons/Button";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useContext } from "react";
-import UserProfileProvider, {
-  UserProfileContext,
-} from "./provider/userProfileProvider";
+import UserDataProvider, { UserDataContext } from "./provider/userDataProvider";
 
 export default function Home() {
-  const user = useContext(UserProfileContext);
+  const user = useContext(UserDataContext);
   return (
     <main className="flex-column w-screen min-h-screen">
       <h1>Hello {user?.userProfile?.firstName}</h1>

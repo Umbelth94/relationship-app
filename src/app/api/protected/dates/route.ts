@@ -5,6 +5,7 @@ import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import { NextResponse } from "next/server";
 import { DateActivity } from "@/app/dategenerator/page";
 import { patchActivities } from "../activities/route";
+import { Activity } from "@/app/models/Activity";
 
 export interface UserDate {
   userId: string;
@@ -92,7 +93,18 @@ export const POST = withUserProfile(
       return new NextResponse("Failed to update activities", { status: 500 });
     }
 
-    if (await updateOrCreateUserDate(activities, userProfile, updateDateId)) {
+    // don't save activities with rank == -1
+    const filteredActivities = activities.filter(
+      (activity) => activity.rank != -1,
+    );
+
+    if (
+      await updateOrCreateUserDate(
+        filteredActivities,
+        userProfile,
+        updateDateId,
+      )
+    ) {
       return new NextResponse("", { status: 201 });
     } else {
       return new NextResponse("Failed to save date", { status: 500 });
@@ -100,6 +112,12 @@ export const POST = withUserProfile(
   },
 );
 
+export interface UserDateInfo extends UserDate {
+  activities: DateActivity[];
+}
+interface GetUserDatesResponse {
+  userDates: UserDateInfo;
+}
 export const GET = withUserProfile(
   async (userProfile: DatabaseUserProfile, req: Request) => {
     // If there are no userDates, return an empty array.
