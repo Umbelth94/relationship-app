@@ -2,7 +2,6 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { NextPage } from "next";
 import { useContext, useState } from "react";
-import { UserDate } from "../api/protected/dates/route";
 import { UserDataContext } from "../provider/userDataProvider";
 
 const MyDates: NextPage = withPageAuthRequired(
@@ -17,7 +16,7 @@ const MyDates: NextPage = withPageAuthRequired(
               <>
                 <hr></hr>
                 {date.activities.map((activity, index) => {
-                  return <p>{activity.description}</p>;
+                  return <p key={activity._id}>{activity.description}</p>;
                 })}
               </>
             );

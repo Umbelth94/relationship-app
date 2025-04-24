@@ -147,7 +147,7 @@ const DateGenerator: NextPage = withPageAuthRequired(
           }}
         >
           <p className="text-[2em] justify-self-center text-center text-primary">
-            What's The Vibe?
+            What&#39;s The Vibe?
           </p>
 
           <div className="flex flex-col gap-2">

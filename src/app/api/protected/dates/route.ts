@@ -1,62 +1,11 @@
 import client from "@/mongodb/mongodb";
-import { ObjectId } from "mongodb";
 import withUserProfile from "@/app/api-helpers/withUserProfile";
 import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import { NextResponse } from "next/server";
 import { DateActivity } from "@/app/dategenerator/page";
-import { patchActivities } from "../activities/route";
 import { Activity } from "@/app/models/Activity";
-
-export interface UserDate {
-  userId: string;
-  activityIds: ObjectId[];
-}
-
-export async function updateOrCreateUserDate(
-  activities: DateActivity[],
-  userProfile: DatabaseUserProfile,
-  updateDateId?: string,
-): Promise<boolean> {
-  const dateCollection = client.db("users").collection<UserDate>("user-dates");
-  const profileCollection = client
-    .db("users")
-    .collection<DatabaseUserProfile>("profiles");
-
-  const activityObjectIds = activities.map((activity) => {
-    return new ObjectId(activity._id);
-  });
-
-  const updateDateObjectId = new ObjectId(updateDateId);
-
-  // Check if updateDateId is provided and exists in the user's dates array.
-  if (
-    updateDateId &&
-    userProfile.userDates &&
-    userProfile.userDates?.some((dateId) => dateId.equals(updateDateObjectId))
-  ) {
-    const updateResult = await dateCollection.updateOne(
-      { _id: updateDateObjectId },
-      { $set: { activityIds: activityObjectIds } },
-    );
-    return updateResult.modifiedCount === 1;
-  } else {
-    // Create a new user-date document.
-    const dateData: UserDate = {
-      userId: userProfile._id,
-      activityIds: activityObjectIds,
-    };
-    const insertResult = await dateCollection.insertOne(dateData);
-    if (insertResult.insertedId) {
-      // Push the new user-date's _id into the user's dates array.
-      const updateProfileResult = await profileCollection.updateOne(
-        { _id: userProfile._id },
-        { $push: { userDates: insertResult.insertedId } },
-      );
-      return updateProfileResult.modifiedCount === 1;
-    }
-    return false;
-  }
-}
+import { patchActivities } from "@/app/api-helpers/activitiesRouteHelper";
+import { updateOrCreateUserDate } from "@/app/api-helpers/datesRouteHelper";
 
 // Valid if all activity ids are in the userProfile
 function isValidActivityIds(
@@ -112,12 +61,6 @@ export const POST = withUserProfile(
   },
 );
 
-export interface UserDateInfo extends UserDate {
-  activities: DateActivity[];
-}
-interface GetUserDatesResponse {
-  userDates: UserDateInfo;
-}
 export const GET = withUserProfile(
   async (userProfile: DatabaseUserProfile, req: Request) => {
     // If there are no userDates, return an empty array.

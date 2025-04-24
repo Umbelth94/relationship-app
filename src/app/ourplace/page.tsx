@@ -1,5 +1,5 @@
 // this is just a placeholder page that does not recieve data
-
+"use client";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { NextPage } from "next";
 

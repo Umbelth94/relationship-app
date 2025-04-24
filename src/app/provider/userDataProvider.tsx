@@ -11,7 +11,7 @@ import {
   Dispatch,
 } from "react";
 import { UserProfile } from "../models/UserProfile";
-import { UserDateInfo } from "../api/protected/dates/route";
+import { UserDateInfo } from "../api-helpers/datesRouteHelper";
 
 interface UserDataContextProps {
   userDates?: UserDateInfo[];
