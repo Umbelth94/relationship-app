@@ -93,7 +93,18 @@ export const POST = withUserProfile(
       return new NextResponse("Failed to update activities", { status: 500 });
     }
 
-    if (await updateOrCreateUserDate(activities, userProfile, updateDateId)) {
+    // don't save activities with rank == -1
+    const filteredActivities = activities.filter(
+      (activity) => activity.rank != -1,
+    );
+
+    if (
+      await updateOrCreateUserDate(
+        filteredActivities,
+        userProfile,
+        updateDateId,
+      )
+    ) {
       return new NextResponse("", { status: 201 });
     } else {
       return new NextResponse("Failed to save date", { status: 500 });
