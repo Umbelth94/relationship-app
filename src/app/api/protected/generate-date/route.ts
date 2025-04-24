@@ -6,8 +6,11 @@ import { Session, getSession } from "@auth0/nextjs-auth0";
 import { Collection, Db } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-import { getActivities, saveActivitiesToMongo } from "../activities/route";
 import withUserProfile from "@/app/api-helpers/withUserProfile";
+import {
+  getActivities,
+  saveActivitiesToMongo,
+} from "@/app/api-helpers/activitiesRouteHelper";
 const openai = new OpenAI();
 
 const responseFormat = `

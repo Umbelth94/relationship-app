@@ -17,7 +17,7 @@ const MyDates: NextPage = withPageAuthRequired(
               <>
                 <hr></hr>
                 {date.activities.map((activity, index) => {
-                  return <p>{activity.description}</p>;
+                  return <p key={activity._id}>{activity.description}</p>;
                 })}
               </>
             );

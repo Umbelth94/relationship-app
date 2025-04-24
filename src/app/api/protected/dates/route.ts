@@ -4,8 +4,8 @@ import withUserProfile from "@/app/api-helpers/withUserProfile";
 import { DatabaseUserProfile } from "@/app/models/UserProfile";
 import { NextResponse } from "next/server";
 import { DateActivity } from "@/app/dategenerator/page";
-import { patchActivities } from "../activities/route";
 import { Activity } from "@/app/models/Activity";
+import { patchActivities } from "@/app/api-helpers/activitiesRouteHelper";
 
 export interface UserDate {
   userId: string;

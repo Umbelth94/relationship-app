@@ -21,8 +21,8 @@ export default function GeneratedDateModal({
   setIsOpen,
   setGeneratedDate,
 }: GeneratedDateModalProps) {
-  if (!generatedDate) return null;
   const { refetchUserDates } = useContext(UserDataContext);
+  if (!generatedDate) return null;
 
   async function saveDateToMongo() {
     //Save the date
@@ -75,6 +75,7 @@ export default function GeneratedDateModal({
             {generatedDate.activities.map((activity, index) => {
               return (
                 <ActivityCard
+                  key={activity._id}
                   setGeneratedDate={setGeneratedDate}
                   activity={activity}
                   index={index}
