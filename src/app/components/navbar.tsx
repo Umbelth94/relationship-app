@@ -12,7 +12,7 @@ export default function Navbar() {
 
   return (
     <TopNavbar
-      className="bg-primary"
+      className="z-50 bg-primary"
       logoPathLightMode="/ourkive_logo_transparent.png"
       logoPathDarkMode="/ourkive_logo_transparent.png"
     >
